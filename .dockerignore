@@ -1,0 +1,7 @@
+.git
+.gitignore
+.zig-cache
+zig-out
+benchmarks/results
+README.md
+AGENTS.md

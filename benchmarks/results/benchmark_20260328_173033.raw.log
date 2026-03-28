@@ -1,0 +1,97 @@
+AVISO: caso Go removido automaticamente (endpoint indisponivel: http://127.0.0.1:18111/health)
+==================================================
+Benchmark Mercury Server (http://127.0.0.1:18110/health)
+Threads=4 Connections=64 Duration=8s Warmup=3s Rounds=2
+Warmup 3s...
+Running 3s test @ http://127.0.0.1:18110/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.89ms  573.09us  13.50ms   91.99%
+    Req/Sec     8.21k     0.86k    9.96k    73.33%
+  Latency Distribution
+     50%    1.90ms
+     75%    2.07ms
+     90%    2.26ms
+     99%    2.82ms
+  98043 requests in 3.00s, 12.06MB read
+Requests/sec:  32676.87
+Transfer/sec:      4.02MB
+
+Rodada 1/2
+Running 8s test @ http://127.0.0.1:18110/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.75ms  331.92us   8.71ms   83.36%
+    Req/Sec     8.70k     0.99k   10.64k    67.19%
+  Latency Distribution
+     50%    1.66ms
+     75%    1.91ms
+     90%    2.13ms
+     99%    2.83ms
+  276987 requests in 8.01s, 34.08MB read
+Requests/sec:  34588.04
+Transfer/sec:      4.26MB
+
+Rodada 2/2
+Running 8s test @ http://127.0.0.1:18110/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.61ms  320.08us  10.26ms   79.50%
+    Req/Sec     9.44k     1.04k   11.86k    70.62%
+  Latency Distribution
+     50%    1.56ms
+     75%    1.68ms
+     90%    1.98ms
+     99%    2.56ms
+  300652 requests in 8.01s, 36.99MB read
+Requests/sec:  37540.17
+Transfer/sec:      4.62MB
+
+==================================================
+Benchmark Node (http://127.0.0.1:18112/health)
+Threads=4 Connections=64 Duration=8s Warmup=3s Rounds=2
+Warmup 3s...
+Running 3s test @ http://127.0.0.1:18112/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     1.45ms    5.00ms 103.44ms   98.62%
+    Req/Sec    16.88k     3.74k   20.34k    83.87%
+  Latency Distribution
+     50%  823.00us
+     75%    0.95ms
+     90%    1.39ms
+     99%   14.96ms
+  208251 requests in 3.10s, 37.34MB read
+Requests/sec:  67180.62
+Transfer/sec:     12.04MB
+
+Rodada 1/2
+Running 8s test @ http://127.0.0.1:18112/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.92ms  618.68us  38.54ms   93.30%
+    Req/Sec    18.29k     2.94k   22.79k    74.06%
+  Latency Distribution
+     50%  770.00us
+     75%    0.87ms
+     90%    1.30ms
+     99%    2.65ms
+  582190 requests in 8.01s, 104.38MB read
+Requests/sec:  72677.66
+Transfer/sec:     13.03MB
+
+Rodada 2/2
+Running 8s test @ http://127.0.0.1:18112/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     0.99ms  527.36us   8.79ms   88.53%
+    Req/Sec    16.89k     3.96k   22.30k    75.31%
+  Latency Distribution
+     50%  783.00us
+     75%    0.97ms
+     90%    1.63ms
+     99%    2.88ms
+  537823 requests in 8.01s, 96.43MB read
+Requests/sec:  67157.07
+Transfer/sec:     12.04MB
+

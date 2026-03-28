@@ -1,0 +1,13 @@
+Resumo consolidado
+Data: 2026-03-28T17:35:16-03:00
+Host: zerocool-eos
+Parametros: THREADS=4 CONNECTIONS=64 DURATION=8s WARMUP=3s ROUNDS=2 CLOSE_CONNECTION=0
+
+Servidor       | Rodadas OK  | RPS medio   | Lat ms med  | P50 ms     | P90 ms     | P99 ms     | SockErr med | ErrPct med
+----------------------------------------------------------------------------------------------------------------------------------
+Mercury Server | 2           | 34645.01    | 1.75        | 1.65       | 2.13       | 2.73       | 0.00        | 0.00      
+Go             | 2           | 145293.38   | 0.63        | 0.24       | 1.71       | 3.64       | 0.00        | 0.00      
+Node           | 2           | 74361.76    | 0.90        | 0.77       | 1.15       | 2.52       | 0.00        | 0.00      
+
+Raw log: benchmarks/results/benchmark_20260328_173418.raw.log
+Summary: benchmarks/results/benchmark_20260328_173418.summary.log

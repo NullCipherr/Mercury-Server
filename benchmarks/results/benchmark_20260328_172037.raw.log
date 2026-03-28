@@ -1,0 +1,105 @@
+==================================================
+Benchmark Mercury Server (http://127.0.0.1:8080/health)
+Threads=4 Connections=64 Duration=8s Warmup=3s Rounds=2
+Warmup 3s...
+Running 3s test @ http://127.0.0.1:8080/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    31.40ms  152.51ms   1.66s    95.17%
+    Req/Sec     2.58k     2.50k    7.97k    62.96%
+  Latency Distribution
+     50%  284.00us
+     75%  386.00us
+     90%    0.93ms
+     99%  803.72ms
+  7641 requests in 3.01s, 1.14MB read
+  Socket errors: connect 0, read 7641, write 0, timeout 0
+Requests/sec:   2542.45
+Transfer/sec:    389.81KB
+
+Rodada 1/2
+Running 8s test @ http://127.0.0.1:8080/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    31.46ms  161.85ms   1.66s    95.92%
+    Req/Sec     2.64k     2.23k    8.83k    61.95%
+  Latency Distribution
+     50%  251.00us
+     75%  348.00us
+     90%  687.00us
+     99%  982.52ms
+  56448 requests in 8.02s, 8.45MB read
+  Socket errors: connect 0, read 56448, write 0, timeout 3
+Requests/sec:   7040.51
+Transfer/sec:      1.05MB
+
+Rodada 2/2
+Running 8s test @ http://127.0.0.1:8080/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    19.65ms  136.19ms   1.67s    97.39%
+    Req/Sec     2.10k     1.63k    6.42k    66.98%
+  Latency Distribution
+     50%  244.00us
+     75%  314.00us
+     90%  546.00us
+     99%  802.90ms
+  24060 requests in 8.02s, 3.60MB read
+  Socket errors: connect 0, read 24060, write 0, timeout 2
+Requests/sec:   3000.87
+Transfer/sec:    460.09KB
+
+==================================================
+Benchmark Go (http://127.0.0.1:8081/health)
+Threads=4 Connections=64 Duration=8s Warmup=3s Rounds=2
+ERRO: endpoint indisponivel para Go: http://127.0.0.1:8081/health
+Dica: suba o servidor correspondente e rode novamente.
+
+==================================================
+Benchmark Node (http://127.0.0.1:8082/health)
+Threads=4 Connections=64 Duration=8s Warmup=3s Rounds=2
+Warmup 3s...
+Running 3s test @ http://127.0.0.1:8082/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     3.12ms    2.15ms  15.53ms   83.13%
+    Req/Sec     5.45k     2.33k   10.42k    52.89%
+  Latency Distribution
+     50%    1.98ms
+     75%    3.90ms
+     90%    6.91ms
+     99%   10.09ms
+  65680 requests in 3.10s, 10.02MB read
+Requests/sec:  21188.68
+Transfer/sec:      3.23MB
+
+Rodada 1/2
+Running 8s test @ http://127.0.0.1:8082/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     3.21ms    2.31ms  29.08ms   84.52%
+    Req/Sec     5.35k     2.15k    8.74k    57.81%
+  Latency Distribution
+     50%    2.14ms
+     75%    3.81ms
+     90%    6.86ms
+     99%   10.56ms
+  170256 requests in 8.01s, 25.98MB read
+Requests/sec:  21251.55
+Transfer/sec:      3.24MB
+
+Rodada 2/2
+Running 8s test @ http://127.0.0.1:8082/health
+  4 threads and 64 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency     2.64ms    1.39ms  10.45ms   87.23%
+    Req/Sec     6.17k     1.49k    8.60k    66.56%
+  Latency Distribution
+     50%    2.12ms
+     75%    2.51ms
+     90%    4.54ms
+     99%    7.74ms
+  196409 requests in 8.01s, 29.97MB read
+Requests/sec:  24524.67
+Transfer/sec:      3.74MB
+
