@@ -289,9 +289,9 @@ make docker-down
 
 ## 📦 Licença
 
-Este repositório não define uma licença OSS explícita até o momento.
+Este projeto é **open source** sob a licença **MIT**.
 
-Se o projeto for distribuído publicamente, recomenda-se adicionar um arquivo `LICENSE` para formalizar o uso.
+Consulte o arquivo [LICENSE](LICENSE) para os termos completos.
 
 ---
 
