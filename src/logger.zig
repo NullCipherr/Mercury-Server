@@ -7,6 +7,7 @@ pub const Level = enum {
     err,
 };
 
+/// Logger síncrono com serialização por mutex para evitar interleaving em ambiente multithread.
 pub const Logger = struct {
     mutex: std.Thread.Mutex = .{},
 

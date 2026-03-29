@@ -4,6 +4,10 @@ const logger_mod = @import("logger.zig");
 const metrics_mod = @import("metrics.zig");
 const server_mod = @import("server.zig");
 
+/// Bootstrap da aplicação:
+/// 1) inicializa infraestrutura (allocator/logger/métricas),
+/// 2) carrega config,
+/// 3) executa servidor e publica resumo operacional no encerramento.
 pub fn main() !void {
     // GPA para desenvolvimento/diagnóstico: permite detectar vazamentos ao finalizar processo.
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};

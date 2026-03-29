@@ -1,5 +1,7 @@
 const std = @import("std");
 
+/// Métricas de runtime compartilhadas entre threads.
+/// Os números são eventual-consistent (ordem monotônica) e priorizam baixo overhead.
 pub const Metrics = struct {
     total_requests: std.atomic.Value(u64) = std.atomic.Value(u64).init(0),
     total_errors: std.atomic.Value(u64) = std.atomic.Value(u64).init(0),
@@ -59,6 +61,7 @@ pub const Metrics = struct {
         }
     }
 
+    /// Retorna latência média em milissegundos.
     pub fn avgLatencyMs(self: *Metrics) f64 {
         const reqs = self.total_requests.load(.monotonic);
         if (reqs == 0) return 0;
@@ -67,6 +70,7 @@ pub const Metrics = struct {
     }
 };
 
+/// Decorador de allocator para telemetria de memória atual/pico.
 pub const TrackingAllocator = struct {
     inner: std.mem.Allocator,
     current: std.atomic.Value(u64) = std.atomic.Value(u64).init(0),

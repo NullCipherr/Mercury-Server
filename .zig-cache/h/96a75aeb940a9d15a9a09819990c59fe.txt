@@ -1,6 +1,6 @@
 0
 15678 22191665 1773075439000000000 f0bdf7a0d76753ffab1319907ec69cf1 1 compiler/test_runner.zig
-1562 17343707 1774748908430736104 638f3be6f302d6f200421ebc1788e93c 0 src/main.zig
+1748 17343707 1774749186739364319 961aa7e0d0ebec05ed026ec49986d669 0 src/main.zig
 22376 22193559 1773075439000000000 2d968f90418b6afe5ba91eaa2e18ba71 1 ubsan_rt.zig
 11083 22191667 1773075439000000000 3c8016eb348fede9a19b94ec4869d8a6 1 compiler_rt.zig
 7957 23214162 1773075439000000000 0ebbb46b337b65e85e7d177cfc93d2ca 1 std/std.zig
@@ -834,13 +834,13 @@
 419 23214061 1773075439000000000 ed7dfc04a5d0c4f0853edb5414ce981e 1 std/os/linux/bpf/btf_ext.zig
 24293 23214063 1773075439000000000 0c7d3ee9ea8e698a843ee6039fd161c4 1 std/os/linux/bpf/helpers.zig
 3221 23213810 1773075439000000000 fda67b74062c7f535bb0a6d0f1fe74fb 1 std/crypto/codecs/asn1/der/ArrayListReverse.zig
-1562 17343707 1774748908430736104 638f3be6f302d6f200421ebc1788e93c 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/main.zig
-3369 17345079 1774748901367669419 4b09e9d31565f73d79dcb6aa2899374c 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/config.zig
-730 17343700 1774448714273377851 0282407e5871cc903c66fbbff8d33a75 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/logger.zig
-6389 17343701 1774748897734635118 d240ddadec76bed586a82f16835da038 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/metrics.zig
-12248 17343705 1774748865924334799 bb1f0d9ade098a983646aeaf0384cde2 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/server.zig
-4454 17343702 1774748878087449628 63bb29b83c2314770f6b4e51e0b1a3da 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/http_parser.zig
-2268 17343704 1774748882675492943 32cefe9f0d49484832e88436f9c9da35 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/connection_pool.zig
-1096 17343699 1774748904377697838 248f8b31f1dc162f6b9d007787d56cb2 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/router.zig
-787 17343698 1774448714270215820 f47467b3916b91eea1ff3d62ea8448f4 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/types.zig
-3474 17343703 1774748889199554536 ef539ca50df5927b9c1c3aeb2de00dd9 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/http_response.zig
+1748 17343707 1774749186739364319 961aa7e0d0ebec05ed026ec49986d669 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/main.zig
+3610 17345079 1774749133963865856 030c282a6b69185c6a12afb4edff87c8 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/config.zig
+830 17343700 1774749157680089852 c3e8d72b2d60d752dc589981bbe4819c 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/logger.zig
+6651 17343701 1774749163570145481 9c405ef208eda0be772d4a4569ac0ab0 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/metrics.zig
+12752 17343705 1774749182554324790 7de3dabc0d507b92fcd011a3e53abae9 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/server.zig
+4815 17343702 1774749147424992994 21134484cf3d160d09ef081dd6170a20 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/http_parser.zig
+2446 17343704 1774749138542909104 130ae2710bfcc0123e101eea08b70414 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/connection_pool.zig
+1260 17343699 1774749167048178331 974ee97b4f4f677a4e7fc632f9d46cbf 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/router.zig
+1176 17343698 1774749172591230686 3d197a747a376ee900a4e8c0cc7626e7 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/types.zig
+3853 17343703 1774749153933054463 e10ffc8ec8029b9c7c0ff73794747f68 0 /home/zerocool/Documentos/NullCipherr/EverythingCanHappen/Zig/AstraServer/Mercury-Server/src/http_response.zig

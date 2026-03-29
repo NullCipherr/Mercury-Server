@@ -9,6 +9,9 @@ pub const ParseLimits = struct {
     max_header_line_bytes: usize = 8192,
 };
 
+/// Converte um buffer HTTP bruto em `Request`.
+/// Pré-condição: `buffer` precisa conter o cabeçalho completo (`\r\n\r\n`).
+/// Pós-condição: headers/body retornados referenciam slices do próprio `buffer` (zero-copy).
 pub fn parseRequest(buffer: []u8, header_storage: *[max_headers]t.Header, limits: ParseLimits) !t.Request {
     // Parser incremental mínimo: primeiro separa head/body via CRLF CRLF.
     const req_end = std.mem.indexOf(u8, buffer, "\r\n\r\n") orelse return error.IncompleteRequest;
@@ -67,6 +70,8 @@ fn parseContentLength(headers: []const t.Header) !usize {
     return value;
 }
 
+/// Mapeia o método textual para enum interno.
+/// Métodos não suportados retornam `UNKNOWN` para fallback controlado do roteador.
 fn parseMethod(method: []const u8) t.HttpMethod {
     if (std.mem.eql(u8, method, "GET")) return .GET;
     if (std.mem.eql(u8, method, "POST")) return .POST;

@@ -1,6 +1,7 @@
 const std = @import("std");
 const t = @import("types.zig");
 
+/// Serializa e envia uma resposta HTTP/1.1 completa no stream.
 pub fn writeResponse(stream: std.net.Stream, res: t.Response) !void {
     const reason = reasonPhrase(res.status_code);
     var header_buf: [512]u8 = undefined;
@@ -14,6 +15,9 @@ pub fn writeResponse(stream: std.net.Stream, res: t.Response) !void {
     try stream.writeAll(res.body);
 }
 
+/// Serve um arquivo estático a partir de `static_dir`.
+/// Segurança: aplica validação de path para bloquear traversal.
+/// Trade-off atual: arquivo é carregado inteiro em memória antes do envio.
 pub fn writeStaticFile(stream: std.net.Stream, static_dir: []const u8, target: []const u8, allocator: std.mem.Allocator) !void {
     // Normaliza e valida o alvo antes de tocar o filesystem.
     const file_path = normalizePath(target, allocator) catch return try writeResponse(stream, .{
@@ -68,6 +72,7 @@ fn normalizePath(target: []const u8, allocator: std.mem.Allocator) ![]u8 {
     return allocator.dupe(u8, rel);
 }
 
+/// Resolve `Content-Type` por extensão de arquivo.
 fn detectContentType(path: []const u8) []const u8 {
     if (std.mem.endsWith(u8, path, ".html")) return "text/html; charset=utf-8";
     if (std.mem.endsWith(u8, path, ".css")) return "text/css; charset=utf-8";
@@ -78,6 +83,7 @@ fn detectContentType(path: []const u8) []const u8 {
     return "application/octet-stream";
 }
 
+/// Frase curta do status HTTP usada na linha de resposta.
 fn reasonPhrase(code: u16) []const u8 {
     return switch (code) {
         200 => "OK",

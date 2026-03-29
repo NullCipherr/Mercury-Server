@@ -1,5 +1,7 @@
 const std = @import("std");
 
+/// Fila thread-safe de file descriptors para desacoplar `accept` da execução dos workers.
+/// Invariante: `head` e `queue` só podem ser lidos/escritos com `mutex` adquirido.
 pub const ConnectionPool = struct {
     allocator: std.mem.Allocator,
     queue: std.ArrayListUnmanaged(i32) = .{},

@@ -1,5 +1,6 @@
 const std = @import("std");
 
+/// Métodos HTTP suportados pelo parser.
 pub const HttpMethod = enum {
     GET,
     POST,
@@ -11,11 +12,14 @@ pub const HttpMethod = enum {
     UNKNOWN,
 };
 
+/// Header HTTP normalizado como par nome/valor.
 pub const Header = struct {
     name: []const u8,
     value: []const u8,
 };
 
+/// Representação interna da request parseada.
+/// Observação: campos `target`, `version`, `headers` e `body` podem apontar para slices do buffer de entrada.
 pub const Request = struct {
     method: HttpMethod,
     target: []const u8,
@@ -31,12 +35,14 @@ pub const Request = struct {
     }
 };
 
+/// Payload de resposta usado pelo roteador e camada HTTP.
 pub const Response = struct {
     status_code: u16,
     content_type: []const u8,
     body: []const u8,
 };
 
+/// Resultado de roteamento: resposta direta ou path estático para serving.
 pub const RouteResult = union(enum) {
     response: Response,
     static_file: []const u8,

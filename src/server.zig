@@ -8,6 +8,8 @@ const response = @import("http_response.zig");
 const logger_mod = @import("logger.zig");
 const metrics_mod = @import("metrics.zig");
 
+/// Núcleo do servidor HTTP.
+/// Responsável por lifecycle de socket, workers e integração entre parser/roteador/resposta.
 pub const Server = struct {
     // Limite físico do buffer de leitura do socket. `max_header_bytes` nunca pode ultrapassar este valor.
     const max_read_buffer_bytes = 64 * 1024;
@@ -75,9 +77,11 @@ pub const Server = struct {
         }
 
         self.pool.shutdown();
+        // Join explícito garante shutdown limpo sem threads órfãs.
         for (workers) |t| t.join();
     }
 
+    /// Faz bind com fallback incremental de porta quando a porta primária está ocupada.
     fn bindWithRetry(self: *Server) !struct { server: std.net.Server, port: u16 } {
         var port = self.cfg.port;
         var attempt: u16 = 0;
@@ -245,6 +249,7 @@ pub const Server = struct {
                 try response.writeResponse(stream, res);
             },
             .static_file => |target| {
+                // TODO técnico: status 200 é contabilizado antes do write; ideal mover a métrica para pós-sucesso.
                 server.metrics.markResponseStatus(200);
                 try response.writeStaticFile(stream, server.cfg.static_dir, target, server.allocator);
             },
@@ -252,6 +257,7 @@ pub const Server = struct {
         return true;
     }
 
+    /// Lê do socket até concluir o bloco de cabeçalhos ou estourar o limite de proteção.
     fn readUntilHeadersComplete(stream: std.net.Stream, buffer: []u8) !usize {
         var total: usize = 0;
 

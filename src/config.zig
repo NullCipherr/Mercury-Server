@@ -1,5 +1,7 @@
 const std = @import("std");
 
+/// Configuração operacional do servidor.
+/// Todos os campos têm defaults seguros para desenvolvimento local.
 pub const Config = struct {
     host: []const u8 = "0.0.0.0",
     port: u16 = 8080,
@@ -19,6 +21,8 @@ pub const Config = struct {
     }
 };
 
+/// Faz parsing da CLI e retorna a configuração final.
+/// Contrato: flags que exigem valor falham com `error.MissingValue`.
 pub fn parseArgs() !Config {
     var cfg = Config{};
 
