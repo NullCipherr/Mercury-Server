@@ -3,12 +3,14 @@ const t = @import("types.zig");
 
 pub const max_headers = 32;
 pub const ParseLimits = struct {
+    // Limites defensivos para evitar abuso de payload/header sem depender de alocação dinâmica.
     max_body_bytes: usize = 1024 * 1024,
     max_target_bytes: usize = 2048,
     max_header_line_bytes: usize = 8192,
 };
 
 pub fn parseRequest(buffer: []u8, header_storage: *[max_headers]t.Header, limits: ParseLimits) !t.Request {
+    // Parser incremental mínimo: primeiro separa head/body via CRLF CRLF.
     const req_end = std.mem.indexOf(u8, buffer, "\r\n\r\n") orelse return error.IncompleteRequest;
     const head = buffer[0..req_end];
     var body = buffer[req_end + 4 ..];
@@ -32,6 +34,7 @@ pub fn parseRequest(buffer: []u8, header_storage: *[max_headers]t.Header, limits
         const name = std.mem.trim(u8, line[0..colon], " ");
         const value = std.mem.trim(u8, line[colon + 1 ..], " ");
 
+        // `headers` referencia slices do buffer original: zero-copy e sem custos extras de alocação.
         header_storage[header_count] = .{ .name = name, .value = value };
         header_count += 1;
     }
@@ -56,6 +59,7 @@ fn parseContentLength(headers: []const t.Header) !usize {
     var value: usize = 0;
     for (headers) |h| {
         if (!std.ascii.eqlIgnoreCase(h.name, "content-length")) continue;
+        // `Content-Length` duplicado é tratado como request inválida para evitar ambiguidades.
         if (found) return error.BadRequest;
         value = std.fmt.parseInt(usize, h.value, 10) catch return error.BadRequest;
         found = true;

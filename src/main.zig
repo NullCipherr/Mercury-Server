@@ -5,6 +5,7 @@ const metrics_mod = @import("metrics.zig");
 const server_mod = @import("server.zig");
 
 pub fn main() !void {
+    // GPA para desenvolvimento/diagnóstico: permite detectar vazamentos ao finalizar processo.
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer {
         const leaked = gpa.deinit();

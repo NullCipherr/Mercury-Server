@@ -15,6 +15,7 @@ pub const Metrics = struct {
     response_5xx: std.atomic.Value(u64) = std.atomic.Value(u64).init(0),
 
     pub fn markRequest(self: *Metrics, latency_ns: u64, success: bool) void {
+        // Contadores monotônicos: baixo custo para escrita concorrente entre workers.
         _ = self.total_requests.fetchAdd(1, .monotonic);
         _ = self.total_latency_ns.fetchAdd(latency_ns, .monotonic);
         if (!success) _ = self.total_errors.fetchAdd(1, .monotonic);
@@ -76,6 +77,7 @@ pub const TrackingAllocator = struct {
     }
 
     pub fn allocator(self: *TrackingAllocator) std.mem.Allocator {
+        // Wrapper para observar uso de memória sem alterar chamadas do restante da aplicação.
         return std.mem.Allocator{
             .ptr = self,
             .vtable = &.{
@@ -92,6 +94,7 @@ pub const TrackingAllocator = struct {
         const maybe_ptr = self.inner.rawAlloc(len, ptr_align, ret_addr);
         if (maybe_ptr) |p| {
             const now = self.current.fetchAdd(len, .monotonic) + len;
+            // Atualiza pico com CAS para manter consistência sob concorrência.
             while (true) {
                 const peak_now = self.peak.load(.monotonic);
                 if (now <= peak_now) break;

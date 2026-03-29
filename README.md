@@ -1,4 +1,5 @@
 <div align="center">
+  <img src="docs/assets/mercury-logo.png" alt="Logo do Mercury Server" width="220" />
   <h1>☿️ Mercury Server</h1>
   <p><i>Servidor HTTP de baixo nível em Zig com parser manual, pool de conexões e métricas em tempo real</i></p>
 
@@ -177,6 +178,8 @@ Próximos passos recomendados para maturidade de produção:
 ├── Dockerfile
 ├── docker-compose.yml
 ├── docs/
+│   ├── assets/
+│   │   └── mercury-logo.png
 │   ├── API.md
 │   ├── ARQUITETURA.md
 │   ├── METRICAS_AUTOMACAO_SHELL.md

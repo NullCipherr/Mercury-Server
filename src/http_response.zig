@@ -15,6 +15,7 @@ pub fn writeResponse(stream: std.net.Stream, res: t.Response) !void {
 }
 
 pub fn writeStaticFile(stream: std.net.Stream, static_dir: []const u8, target: []const u8, allocator: std.mem.Allocator) !void {
+    // Normaliza e valida o alvo antes de tocar o filesystem.
     const file_path = normalizePath(target, allocator) catch return try writeResponse(stream, .{
         .status_code = 400,
         .content_type = "application/json",
@@ -60,6 +61,7 @@ fn normalizePath(target: []const u8, allocator: std.mem.Allocator) ![]u8 {
     if (!std.mem.startsWith(u8, target, "/static/")) return error.InvalidPath;
 
     const rel = target[8..];
+    // Bloqueio explícito de path traversal.
     if (std.mem.indexOf(u8, rel, "..") != null) return error.InvalidPath;
     if (rel.len == 0) return try allocator.dupe(u8, "index.html");
 

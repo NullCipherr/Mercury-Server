@@ -3,6 +3,7 @@ const t = @import("types.zig");
 const metrics_mod = @import("metrics.zig");
 
 pub fn route(req: t.Request, metrics: *metrics_mod.Metrics) t.RouteResult {
+    // Métricas entram como dependência para permitir evolução de observabilidade por rota sem mudar assinatura.
     _ = metrics;
 
     if (std.mem.eql(u8, req.target, "/health")) {

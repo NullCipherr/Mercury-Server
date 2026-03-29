@@ -13,6 +13,7 @@ pub const Config = struct {
 
     pub fn resolveThreads(self: Config) u16 {
         if (self.threads != 0) return self.threads;
+        // Em produção, evitar single-worker por padrão melhora throughput e resiliência a latência.
         const cpu_count = std.Thread.getCpuCount() catch 4;
         return @intCast(@max(cpu_count, 2));
     }

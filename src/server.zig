@@ -9,6 +9,7 @@ const logger_mod = @import("logger.zig");
 const metrics_mod = @import("metrics.zig");
 
 pub const Server = struct {
+    // Limite físico do buffer de leitura do socket. `max_header_bytes` nunca pode ultrapassar este valor.
     const max_read_buffer_bytes = 64 * 1024;
 
     allocator: std.mem.Allocator,
@@ -38,6 +39,7 @@ pub const Server = struct {
     }
 
     pub fn run(self: *Server) !void {
+        // Garante que o limite configurado para cabeçalhos seja válido antes de iniciar workers/rede.
         if (self.cfg.max_header_bytes == 0 or self.cfg.max_header_bytes > max_read_buffer_bytes) {
             return error.InvalidHeaderLimit;
         }
@@ -68,6 +70,7 @@ pub const Server = struct {
             errdefer conn.stream.close();
 
             self.metrics.markConnectionAccepted();
+            // Aceitação e processamento são desacoplados: o acceptor apenas enfileira sockets.
             try self.pool.push(conn.stream.handle);
         }
 
@@ -83,6 +86,7 @@ pub const Server = struct {
             const address = try std.net.Address.parseIp(self.cfg.host, port);
             const server = address.listen(.{ .reuse_address = true }) catch |err| switch (err) {
                 error.AddressInUse => {
+                    // Estratégia de boot resiliente para ambientes onde a porta padrão pode estar ocupada.
                     if (attempt >= self.cfg.port_retries or port == std.math.maxInt(u16)) return error.AddressInUse;
                     self.logger.log(
                         .warn,
@@ -116,6 +120,7 @@ pub const Server = struct {
             var stream = std.net.Stream{ .handle = fd };
             const start = std.time.nanoTimestamp();
 
+            // Timeouts por conexão evitam workers bloqueados indefinidamente em peers lentos/quebrados.
             setSocketTimeouts(fd, server.cfg.read_timeout_ms, server.cfg.write_timeout_ms) catch |err| {
                 server.logger.log(.warn, "worker {d} falhou ao configurar timeout: {s}", .{ ctx.worker_id, @errorName(err) });
             };
@@ -137,6 +142,7 @@ pub const Server = struct {
 
     fn handleConnection(server: *Server, stream: std.net.Stream) !bool {
         var read_buf: [max_read_buffer_bytes]u8 = undefined;
+        // Lê até fechar os cabeçalhos para limitar parsing a uma janela previsível de memória.
         const bytes_read = readUntilHeadersComplete(stream, read_buf[0..server.cfg.max_header_bytes]) catch |err| switch (err) {
             error.HeaderTooLarge => {
                 server.metrics.markHeaderTooLarge();
@@ -259,6 +265,7 @@ pub const Server = struct {
             }
         }
 
+        // Se o delimitador não apareceu até o limite permitido, tratamos como header oversized.
         if (std.mem.indexOf(u8, buffer[0..total], "\r\n\r\n") == null) return error.HeaderTooLarge;
         return total;
     }
@@ -282,6 +289,7 @@ pub const Server = struct {
     }
 
     fn timevalFromMs(timeout_ms: u32) std.posix.timeval {
+        // Conversão explícita para `timeval` (segundos + microssegundos), usada em SO_RCVTIMEO/SO_SNDTIMEO.
         return .{
             .sec = @as(isize, @intCast(timeout_ms / 1000)),
             .usec = @as(isize, @intCast((timeout_ms % 1000) * 1000)),

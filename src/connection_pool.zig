@@ -30,6 +30,7 @@ pub const ConnectionPool = struct {
         self.mutex.lock();
         defer self.mutex.unlock();
 
+        // Consumidores bloqueiam enquanto não houver conexões e o pool não estiver encerrado.
         while (self.head >= self.queue.items.len and !self.closed) {
             self.cond.wait(&self.mutex);
         }
@@ -54,6 +55,7 @@ pub const ConnectionPool = struct {
         self.mutex.lock();
         defer self.mutex.unlock();
         self.closed = true;
+        // Acorda todos os workers para encerrarem com segurança quando `run()` terminar.
         self.cond.broadcast();
     }
 };
