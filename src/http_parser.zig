@@ -118,3 +118,67 @@ test "falha com body incompleto" {
         parseRequest(@constCast(raw), &storage, .{}),
     );
 }
+
+test "parse GET request without body" {
+    var storage: [max_headers]t.Header = undefined;
+    const raw = "GET /health HTTP/1.1\r\nHost: localhost\r\n\r\n";
+    const req = try parseRequest(@constCast(raw), &storage, .{});
+    try std.testing.expectEqual(t.HttpMethod.GET, req.method);
+    try std.testing.expectEqualStrings("/health", req.target);
+    try std.testing.expectEqualStrings("", req.body);
+}
+
+test "reject duplicate content-length headers" {
+    var storage: [max_headers]t.Header = undefined;
+    const raw = "POST /x HTTP/1.1\r\nContent-Length: 5\r\nContent-Length: 5\r\n\r\nhello";
+    try std.testing.expectError(
+        error.BadRequest,
+        parseRequest(@constCast(raw), &storage, .{}),
+    );
+}
+
+test "reject target exceeding max_target_bytes" {
+    var storage: [max_headers]t.Header = undefined;
+    const raw = "GET /aaaaaaaaaa HTTP/1.1\r\nHost: localhost\r\n\r\n";
+    try std.testing.expectError(
+        error.TargetTooLarge,
+        parseRequest(@constCast(raw), &storage, .{ .max_target_bytes = 4 }),
+    );
+}
+
+test "reject incomplete request without CRLFCRLF" {
+    var storage: [max_headers]t.Header = undefined;
+    const raw = "GET /health HTTP/1.1\r\nHost: localhost\r\n";
+    try std.testing.expectError(
+        error.IncompleteRequest,
+        parseRequest(@constCast(raw), &storage, .{}),
+    );
+}
+
+test "parse all HTTP methods" {
+    const methods = [_]struct { raw: []const u8, expected: t.HttpMethod }{
+        .{ .raw = "GET", .expected = .GET },
+        .{ .raw = "POST", .expected = .POST },
+        .{ .raw = "PUT", .expected = .PUT },
+        .{ .raw = "DELETE", .expected = .DELETE },
+        .{ .raw = "PATCH", .expected = .PATCH },
+        .{ .raw = "OPTIONS", .expected = .OPTIONS },
+        .{ .raw = "HEAD", .expected = .HEAD },
+        .{ .raw = "FOOBAR", .expected = .UNKNOWN },
+    };
+
+    for (methods) |m| {
+        try std.testing.expectEqual(m.expected, parseMethod(m.raw));
+    }
+}
+
+test "reject header line exceeding limit" {
+    var storage: [max_headers]t.Header = undefined;
+    var buf: [512]u8 = undefined;
+    // Build a request with a very long header line
+    const raw = try std.fmt.bufPrint(&buf, "GET / HTTP/1.1\r\nX-Big: {s}\r\n\r\n", .{"A" ** 200});
+    try std.testing.expectError(
+        error.HeaderLineTooLarge,
+        parseRequest(@constCast(raw), &storage, .{ .max_header_line_bytes = 10 }),
+    );
+}

@@ -141,3 +141,68 @@ fn reasonPhrase(code: u16) []const u8 {
         else => "OK",
     };
 }
+
+test "normalizePath resolves / to index.html" {
+    const alloc = std.testing.allocator;
+    const result = try normalizePath("/", alloc);
+    defer alloc.free(result);
+    try std.testing.expectEqualStrings("index.html", result);
+}
+
+test "normalizePath resolves valid static path" {
+    const alloc = std.testing.allocator;
+    const result = try normalizePath("/static/style.css", alloc);
+    defer alloc.free(result);
+    try std.testing.expectEqualStrings("style.css", result);
+}
+
+test "normalizePath rejects path traversal with .." {
+    const alloc = std.testing.allocator;
+    try std.testing.expectError(error.InvalidPath, normalizePath("/static/../etc/passwd", alloc));
+}
+
+test "normalizePath rejects encoded path traversal %2e%2e" {
+    const alloc = std.testing.allocator;
+    try std.testing.expectError(error.InvalidPath, normalizePath("/static/%2e%2e/etc/passwd", alloc));
+}
+
+test "normalizePath rejects backslash traversal" {
+    const alloc = std.testing.allocator;
+    try std.testing.expectError(error.InvalidPath, normalizePath("/static/..\\etc\\passwd", alloc));
+}
+
+test "normalizePath rejects non-static prefix" {
+    const alloc = std.testing.allocator;
+    try std.testing.expectError(error.InvalidPath, normalizePath("/etc/passwd", alloc));
+}
+
+test "normalizePath empty static path resolves to index.html" {
+    const alloc = std.testing.allocator;
+    const result = try normalizePath("/static/", alloc);
+    defer alloc.free(result);
+    try std.testing.expectEqualStrings("index.html", result);
+}
+
+test "percentDecode decodes basic sequences" {
+    const alloc = std.testing.allocator;
+    const result = try percentDecode("hello%20world", alloc);
+    defer alloc.free(result);
+    try std.testing.expectEqualStrings("hello world", result);
+}
+
+test "percentDecode passes plain text through" {
+    const alloc = std.testing.allocator;
+    const result = try percentDecode("plain", alloc);
+    defer alloc.free(result);
+    try std.testing.expectEqualStrings("plain", result);
+}
+
+test "detectContentType returns correct MIME types" {
+    try std.testing.expectEqualStrings("text/html; charset=utf-8", detectContentType("index.html"));
+    try std.testing.expectEqualStrings("text/css; charset=utf-8", detectContentType("style.css"));
+    try std.testing.expectEqualStrings("application/javascript", detectContentType("app.js"));
+    try std.testing.expectEqualStrings("application/json", detectContentType("data.json"));
+    try std.testing.expectEqualStrings("image/svg+xml", detectContentType("logo.svg"));
+    try std.testing.expectEqualStrings("image/png", detectContentType("image.png"));
+    try std.testing.expectEqualStrings("application/octet-stream", detectContentType("file.bin"));
+}

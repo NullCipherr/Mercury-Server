@@ -34,3 +34,91 @@ pub fn route(req: t.Request, metrics: *metrics_mod.Metrics) t.RouteResult {
         .body = "{\"error\":\"not found\"}",
     } };
 }
+
+test "route /health returns 200 ok" {
+    var metrics = metrics_mod.Metrics{};
+    var headers: [0]t.Header = undefined;
+    const req = t.Request{
+        .method = .GET,
+        .target = "/health",
+        .version = "HTTP/1.1",
+        .headers = &headers,
+        .body = "",
+    };
+    const result = route(req, &metrics);
+    switch (result) {
+        .response => |res| {
+            try std.testing.expectEqual(@as(u16, 200), res.status_code);
+            try std.testing.expect(std.mem.indexOf(u8, res.body, "\"ok\"") != null);
+        },
+        .static_file => unreachable,
+    }
+}
+
+test "route /api/hello returns 200" {
+    var metrics = metrics_mod.Metrics{};
+    var headers: [0]t.Header = undefined;
+    const req = t.Request{
+        .method = .GET,
+        .target = "/api/hello",
+        .version = "HTTP/1.1",
+        .headers = &headers,
+        .body = "",
+    };
+    const result = route(req, &metrics);
+    switch (result) {
+        .response => |res| try std.testing.expectEqual(@as(u16, 200), res.status_code),
+        .static_file => unreachable,
+    }
+}
+
+test "route / serves static file" {
+    var metrics = metrics_mod.Metrics{};
+    var headers: [0]t.Header = undefined;
+    const req = t.Request{
+        .method = .GET,
+        .target = "/",
+        .version = "HTTP/1.1",
+        .headers = &headers,
+        .body = "",
+    };
+    const result = route(req, &metrics);
+    switch (result) {
+        .response => unreachable,
+        .static_file => |path| try std.testing.expectEqualStrings("/", path),
+    }
+}
+
+test "route /static/file.css serves static file" {
+    var metrics = metrics_mod.Metrics{};
+    var headers: [0]t.Header = undefined;
+    const req = t.Request{
+        .method = .GET,
+        .target = "/static/file.css",
+        .version = "HTTP/1.1",
+        .headers = &headers,
+        .body = "",
+    };
+    const result = route(req, &metrics);
+    switch (result) {
+        .response => unreachable,
+        .static_file => |path| try std.testing.expectEqualStrings("/static/file.css", path),
+    }
+}
+
+test "route unknown path returns 404" {
+    var metrics = metrics_mod.Metrics{};
+    var headers: [0]t.Header = undefined;
+    const req = t.Request{
+        .method = .GET,
+        .target = "/nonexistent",
+        .version = "HTTP/1.1",
+        .headers = &headers,
+        .body = "",
+    };
+    const result = route(req, &metrics);
+    switch (result) {
+        .response => |res| try std.testing.expectEqual(@as(u16, 404), res.status_code),
+        .static_file => unreachable,
+    }
+}
