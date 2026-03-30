@@ -14,6 +14,9 @@ pub const Server = struct {
     // Limite físico do buffer de leitura do socket. `max_header_bytes` nunca pode ultrapassar este valor.
     const max_read_buffer_bytes = 64 * 1024;
 
+    // Global pointer used by the POSIX signal handler to flip the running flag.
+    var global_instance: ?*Server = null;
+
     allocator: std.mem.Allocator,
     cfg: config_mod.Config,
     pool: pool_mod.ConnectionPool,
@@ -64,8 +67,11 @@ pub const Server = struct {
 
         self.logger.log(.info, "Mercury Server ouvindo em {s}:{d} com {d} workers", .{ self.cfg.host, bound.port, worker_count });
 
+        installSignalHandlers(self);
+
         while (self.running.load(.monotonic)) {
             const conn = tcp_server.accept() catch |err| {
+                if (!self.running.load(.monotonic)) break;
                 self.logger.log(.warn, "erro no accept: {s}", .{@errorName(err)});
                 continue;
             };
@@ -77,6 +83,7 @@ pub const Server = struct {
         }
 
         self.pool.shutdown();
+        self.logger.log(.info, "shutting down gracefully...", .{});
         // Join explícito garante shutdown limpo sem threads órfãs.
         for (workers) |t| t.join();
     }
@@ -300,5 +307,26 @@ pub const Server = struct {
             .sec = @as(isize, @intCast(timeout_ms / 1000)),
             .usec = @as(isize, @intCast((timeout_ms % 1000) * 1000)),
         };
+    }
+
+    /// Install POSIX signal handlers for SIGINT and SIGTERM to enable graceful shutdown.
+    fn installSignalHandlers(self: *Server) void {
+        global_instance = self;
+
+        const handler = std.posix.Sigaction{
+            .handler = .{ .handler = handleSignal },
+            .mask = std.posix.empty_sigset,
+            .flags = 0,
+        };
+
+        std.posix.sigaction(std.posix.SIG.INT, &handler, null) catch {};
+        std.posix.sigaction(std.posix.SIG.TERM, &handler, null) catch {};
+    }
+
+    fn handleSignal(_: c_int) callconv(.c) void {
+        if (global_instance) |srv| {
+            srv.running.store(false, .monotonic);
+            srv.pool.shutdown();
+        }
     }
 };
