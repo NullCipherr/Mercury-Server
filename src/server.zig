@@ -319,8 +319,8 @@ pub const Server = struct {
             .flags = 0,
         };
 
-        std.posix.sigaction(std.posix.SIG.INT, &handler, null) catch {};
-        std.posix.sigaction(std.posix.SIG.TERM, &handler, null) catch {};
+        std.posix.sigaction(std.posix.SIG.INT, &handler, null);
+        std.posix.sigaction(std.posix.SIG.TERM, &handler, null);
     }
 
     fn handleSignal(_: c_int) callconv(.c) void {

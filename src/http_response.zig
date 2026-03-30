@@ -94,7 +94,7 @@ fn percentDecode(input: []const u8, allocator: std.mem.Allocator) ![]u8 {
         if (input[i] == '%' and i + 2 < input.len) {
             const high = hexVal(input[i + 1]) orelse return error.InvalidEncoding;
             const low = hexVal(input[i + 2]) orelse return error.InvalidEncoding;
-            out[j] = (high << 4) | low;
+            out[j] = (@as(u8, high) << 4) | @as(u8, low);
             i += 3;
         } else {
             out[j] = input[i];

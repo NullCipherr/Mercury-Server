@@ -4,7 +4,7 @@
 
 ## Pré-requisitos
 
-- Zig `0.15+`
+- Zig `0.14+`
 - Docker 24+ e Docker Compose v2 (opcional)
 - Make (opcional)
 
