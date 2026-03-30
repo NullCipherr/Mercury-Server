@@ -1,4 +1,5 @@
 const std = @import("std");
+const logger_mod = @import("logger.zig");
 
 /// Configuração operacional do servidor.
 /// Todos os campos têm defaults seguros para desenvolvimento local.
@@ -12,6 +13,7 @@ pub const Config = struct {
     max_header_bytes: usize = 16 * 1024,
     max_body_bytes: usize = 1024 * 1024,
     static_dir: []const u8 = "./static",
+    log_level: logger_mod.Level = .debug,
 
     pub fn resolveThreads(self: Config) u16 {
         if (self.threads != 0) return self.threads;
@@ -55,6 +57,9 @@ pub fn parseArgs() !Config {
             cfg.max_body_bytes = try std.fmt.parseInt(usize, value, 10);
         } else if (std.mem.eql(u8, arg, "--static-dir")) {
             cfg.static_dir = args.next() orelse return error.MissingValue;
+        } else if (std.mem.eql(u8, arg, "--log-level")) {
+            const value = args.next() orelse return error.MissingValue;
+            cfg.log_level = parseLogLevel(value) orelse return error.InvalidArgument;
         } else if (std.mem.eql(u8, arg, "--help")) {
             printHelp();
             std.process.exit(0);
@@ -80,7 +85,16 @@ fn printHelp() void {
         \\  --max-header-bytes <n> (default: 16384)
         \\  --max-body-bytes <n>   (default: 1048576)
         \\  --static-dir <path>    (default: ./static)
+        \\  --log-level <level>    debug|info|warn|err (default: debug)
         \\  --help
         \\ 
     , .{});
+}
+
+fn parseLogLevel(value: []const u8) ?logger_mod.Level {
+    if (std.mem.eql(u8, value, "debug")) return .debug;
+    if (std.mem.eql(u8, value, "info")) return .info;
+    if (std.mem.eql(u8, value, "warn")) return .warn;
+    if (std.mem.eql(u8, value, "err")) return .err;
+    return null;
 }

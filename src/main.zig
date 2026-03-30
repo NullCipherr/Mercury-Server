@@ -29,6 +29,8 @@ pub fn main() !void {
         return err;
     };
 
+    logger.min_level = cfg.log_level;
+
     var server = server_mod.Server.init(alloc, cfg, &logger, &metrics);
     defer server.deinit();
 

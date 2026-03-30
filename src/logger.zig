@@ -10,8 +10,11 @@ pub const Level = enum {
 /// Logger síncrono com serialização por mutex para evitar interleaving em ambiente multithread.
 pub const Logger = struct {
     mutex: std.Thread.Mutex = .{},
+    min_level: Level = .debug,
 
     pub fn log(self: *Logger, level: Level, comptime fmt: []const u8, args: anytype) void {
+        if (@intFromEnum(level) < @intFromEnum(self.min_level)) return;
+
         self.mutex.lock();
         defer self.mutex.unlock();
 
