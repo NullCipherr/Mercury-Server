@@ -15,7 +15,7 @@ Thank you for your interest in contributing to Mercury Server! This guide will h
 ### Setting Up the Development Environment
 
 ```bash
-git clone https://github.com/your-org/Mercury-Server.git
+git clone https://github.com/NullCipherr/Mercury-Server.git
 cd Mercury-Server
 zig build
 zig build test
