@@ -1,21 +1,21 @@
 <div align="center">
-  <img src="docs/assets/mercury-logo.png" alt="Logo do Mercury Server" width="220" />
-  <h1>☿️ Mercury Server</h1>
-  <p><i>Servidor HTTP de baixo nível em Zig com parser manual, pool de conexões e métricas em tempo real</i></p>
+  <img src="docs/assets/mercury-logo.png" alt="Mercury Server Logo" width="220" />
+  <h1>Mercury Server</h1>
+  <p><i>A low-level HTTP/1.1 server in Zig with a hand-written parser, connection pooling, and real-time metrics</i></p>
 
   <p>
-    <img src="https://img.shields.io/badge/Zig-0.15+-F7A41D?style=for-the-badge&logo=zig&logoColor=white" alt="Zig" />
-    <img src="https://img.shields.io/badge/HTTP-1.1-1E88E5?style=for-the-badge" alt="HTTP/1.1" />
-    <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose" />
-    <img src="https://img.shields.io/badge/Make-Automa%C3%A7%C3%A3o-6D4C41?style=for-the-badge" alt="Make" />
+    <a href="https://github.com/NullCipherr/Mercury-Server/actions/workflows/ci.yml"><img src="https://github.com/NullCipherr/Mercury-Server/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
+    <a href="LICENSE"><img src="https://img.shields.io/github/license/NullCipherr/Mercury-Server?style=flat-square" alt="License" /></a>
+    <img src="https://img.shields.io/badge/Zig-0.14+-F7A41D?style=flat-square&logo=zig&logoColor=white" alt="Zig" />
+    <img src="https://img.shields.io/badge/HTTP-1.1-1E88E5?style=flat-square" alt="HTTP/1.1" />
   </p>
 </div>
 
 ---
 
-## 📚 Documentação Modular
+## Documentation
 
-A documentação técnica foi organizada em módulos para facilitar onboarding e manutenção:
+Technical documentation is organized into modules for easy onboarding and maintenance:
 
 - [docs/README.md](docs/README.md)
 - [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
@@ -28,89 +28,91 @@ A documentação técnica foi organizada em módulos para facilitar onboarding e
 
 ---
 
-## 🖼️ Preview
+## Preview
 
-Interface estática servida pelo próprio Mercury Server em `GET /`:
+Static interface served by Mercury Server itself at `GET /`:
 
 - arquivo: `static/index.html`
 - acesso local: `http://localhost:8080`
 
 ---
 
-## ⚡ Visão Geral
+## Overview
 
-O **Mercury Server** é um servidor HTTP escrito em Zig com foco em previsibilidade, baixo overhead e controle explícito de recursos.
+**Mercury Server** is an HTTP server written in Zig focused on predictability, low overhead, and explicit resource control.
 
-O projeto prioriza:
+The project prioritizes:
 
-- parser HTTP manual (sem framework web);
-- fila thread-safe para desacoplar `accept` e processamento;
-- workers fixos para reduzir churn de thread;
-- métricas operacionais expostas por endpoint;
-- serving de arquivos estáticos com validação de caminho.
-
----
-
-## ✨ Principais Recursos
-
-- **Parser HTTP manual** com limites de cabeçalho/corpo configuráveis.
-- **Pool de conexões thread-safe** para distribuir sockets entre workers.
-- **Métricas embutidas** (`/metrics`) com requests, erros e latência média.
-- **Hardening básico de I/O** com timeout de leitura e escrita por conexão.
-- **Fallback de porta automático** com `--port-retries`.
-- **Servidor de arquivos estáticos** (`/` e `/static/*`) com proteção contra path traversal.
-- **Execução local e containerizada** com `Makefile` e Docker Compose.
+- Hand-written HTTP parser (no web framework);
+- Thread-safe queue to decouple `accept` from processing;
+- Fixed worker threads to reduce thread churn;
+- Operational metrics exposed via endpoint;
+- Static file serving with path traversal protection.
 
 ---
 
-## 🧱 Arquitetura
+## Features
 
-Fluxo principal:
-
-1. `main.zig` inicializa allocator, logger, métricas e configuração.
-2. `server.zig` faz bind com retry, recebe conexões e empilha no pool.
-3. Workers consomem a fila, aplicam timeouts de socket e processam requests.
-4. `http_parser.zig` interpreta request line, headers e valida limites.
-5. `router.zig` decide entre resposta JSON, métricas ou arquivo estático.
-6. `http_response.zig` serializa resposta HTTP/1.1 e envia ao cliente.
+- **Hand-written HTTP parser** with configurable header/body size limits.
+- **Thread-safe connection pool** to distribute sockets across workers.
+- **Built-in metrics** (`/metrics`) with requests, errors, and average latency.
+- **Basic I/O hardening** with per-connection read/write timeouts.
+- **Automatic port fallback** with `--port-retries`.
+- **Static file server** (`/` and `/static/*`) with path traversal protection.
+- **Graceful shutdown** via POSIX signal handling (SIGINT/SIGTERM).
+- **Runtime log level filtering** via `--log-level`.
+- **Local and containerized execution** with `Makefile` and Docker Compose.
 
 ---
 
-## 📈 Performance
+## Architecture
 
-O projeto inclui benchmark comparativo contra Go e Node em `benchmarks/`.
+Main request flow:
 
-- Script principal: `benchmarks/run.sh`
-- Saídas: `benchmarks/results/benchmark_YYYYMMDD_HHMMSS.*`
-- Métricas acompanhadas:
-  - requests/segundo (via `wrk`);
-  - latência média;
-  - memória atual/pico (TrackingAllocator).
+1. `main.zig` initializes allocator, logger, metrics, and configuration.
+2. `server.zig` binds with retry, accepts connections, and pushes them to the pool.
+3. Workers consume the queue, apply socket timeouts, and process requests.
+4. `http_parser.zig` parses the request line, headers, and validates limits.
+5. `router.zig` dispatches to JSON response, metrics, or static file serving.
+6. `http_response.zig` serializes the HTTP/1.1 response and sends it to the client.
 
-Execução de benchmark:
+---
+
+## Performance
+
+The project includes a comparative benchmark against Go and Node in `benchmarks/`.
+
+- Main script: `benchmarks/run.sh`
+- Output: `benchmarks/results/benchmark_YYYYMMDD_HHMMSS.*`
+- Tracked metrics:
+  - requests/second (via `wrk`);
+  - average latency;
+  - current/peak memory (TrackingAllocator).
+
+Run benchmark:
 
 ```bash
 bash benchmarks/run.sh
 ```
 
-Benchmark com parâmetros explícitos:
+Benchmark with explicit parameters:
 
 ```bash
 THREADS=8 CONNECTIONS=128 DURATION=20s WARMUP=5s ROUNDS=3 CLOSE_CONNECTION=0 bash benchmarks/run.sh
 ```
 
-## 📊 Resultado Oficial de Benchmark
+## Official Benchmark Results
 
-Pré-publicação (antes do GitHub), consideramos este como o benchmark oficial de referência.
+Pre-publication reference benchmark.
 
-- Data: `2026-03-28` (America/Sao_Paulo)
+- Date: `2026-03-28` (America/Sao_Paulo)
 - Script: `benchmarks/run.sh`
-- Parâmetros: `THREADS=4 CONNECTIONS=64 DURATION=8s WARMUP=3s ROUNDS=2 CLOSE_CONNECTION=0`
+- Parameters: `THREADS=4 CONNECTIONS=64 DURATION=8s WARMUP=3s ROUNDS=2 CLOSE_CONNECTION=0`
 - Artefatos:
   - `benchmarks/results/benchmark_20260328_173418.raw.log`
   - `benchmarks/results/benchmark_20260328_173418.summary.log`
 
-| Servidor | Rodadas OK | RPS médio | Lat ms med | P50 ms | P90 ms | P99 ms | SockErr méd | ErrPct méd |
+| Server | Rounds OK | Avg RPS | Avg Lat ms | P50 ms | P90 ms | P99 ms | Avg SockErr | Avg ErrPct |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
 | Mercury Server | 2 | 34645.01 | 1.75 | 1.65 | 2.13 | 2.73 | 0.00 | 0.00 |
 | Go | 2 | 145293.38 | 0.63 | 0.24 | 1.71 | 3.64 | 0.00 | 0.00 |
@@ -118,39 +120,39 @@ Pré-publicação (antes do GitHub), consideramos este como o benchmark oficial 
 
 ---
 
-## 🧪 Desafios Técnicos e Decisões
+## Technical Decisions
 
-- **Controle de memória**: uso de `TrackingAllocator` para visibilidade de consumo em runtime.
-- **Parser sem alocação no caminho quente**: leitura em buffer fixo para reduzir custo por request.
-- **Confiabilidade operacional**: fallback de porta, limites de payload e timeouts de socket.
-- **Simplicidade intencional**: escopo HTTP/1.1 essencial, sem abstrações desnecessárias.
-
----
-
-## 🗺️ Roadmap
-
-Próximos passos recomendados para maturidade de produção:
-
-- suporte robusto a keep-alive e parsing incremental completo;
-- streaming de arquivos estáticos para reduzir pico de memória;
-- logs estruturados e integração com exportador Prometheus;
-- suíte de testes de fuzzing para parser HTTP;
-- estratégia de deploy com proxy reverso + TLS + health checks de orquestração.
+- **Memory control**: `TrackingAllocator` for runtime memory visibility.
+- **Zero-allocation hot path**: fixed-buffer reads to reduce per-request cost.
+- **Operational reliability**: port fallback, payload limits, and socket timeouts.
+- **Intentional simplicity**: essential HTTP/1.1 scope, no unnecessary abstractions.
 
 ---
 
-## 🛠️ Stack Tecnológica
+## Roadmap
 
-- **Linguagem**: Zig (0.15+)
+Recommended next steps for production maturity:
+
+- Robust keep-alive support and full incremental parsing;
+- Static file streaming to reduce peak memory usage;
+- Structured logging and Prometheus exporter integration;
+- HTTP parser fuzz testing suite;
+- Deployment strategy with reverse proxy + TLS + orchestration health checks.
+
+---
+
+## Tech Stack
+
+- **Language**: Zig (0.14+)
 - **Networking**: `std.net` (TCP + sockets)
-- **Concorrência**: threads nativas + estrutura de pool
+- **Concurrency**: native threads + connection pool
 - **Build/Test**: Zig Build System (`zig build`, `zig build test`)
-- **Automação local**: Makefile
-- **Containerização**: Docker + Docker Compose
+- **Automation**: Makefile
+- **Containerization**: Docker + Docker Compose
 
 ---
 
-## 📂 Estrutura do Projeto
+## Project Structure
 
 ```text
 .
@@ -194,47 +196,47 @@ Próximos passos recomendados para maturidade de produção:
 
 ---
 
-## 🚀 Como Rodar Localmente
+## Getting Started
 
-### Pré-requisitos
+### Prerequisites
 
-- Zig `0.15+`
-- Make (opcional, mas recomendado)
-- Docker 24+ e Docker Compose v2 (opcional)
+- Zig `0.14+`
+- Make (optional, but recommended)
+- Docker 24+ and Docker Compose v2 (optional)
 
-### Execução direta com Zig
+### Running with Zig
 
 ```bash
 zig build
 zig build run
 ```
 
-Com parâmetros explícitos:
+With explicit parameters:
 
 ```bash
 zig build run -- --host 0.0.0.0 --port 8080 --threads 8 --static-dir ./static
 ```
 
-### Execução com Makefile
+### Running with Makefile
 
 ```bash
 make build
 make run PORT=8080 THREADS=8
 ```
 
-### Endpoints locais
+### Endpoints
 
 - `GET /health`
 - `GET /api/hello`
 - `GET /metrics`
 - `GET /`
-- `GET /static/<arquivo>`
+- `GET /static/<file>`
 
 ---
 
-## 🐳 Deploy Local com Docker
+## Docker Deployment
 
-### Build e subida
+### Build and start
 
 ```bash
 docker compose up -d --build
@@ -247,7 +249,7 @@ make docker-build
 make docker-up
 ```
 
-### Operação
+### Operations
 
 ```bash
 docker compose logs -f mercury-server
@@ -261,42 +263,48 @@ make docker-logs
 make docker-down
 ```
 
-### Acesso
+### Access
 
-- aplicação: `http://localhost:8080`
-- health check manual: `curl -i http://localhost:8080/health`
-
----
-
-## 📜 Scripts Principais
-
-- `make help`: lista comandos disponíveis.
-- `make build`: compila o binário.
-- `make run`: executa servidor com argumentos configuráveis por variáveis.
-- `make test`: executa testes unitários (`zig build test`).
-- `make test-unit`: executa testes unitários (`zig build test`).
-- `make test-integration`: executa testes de integração HTTP com servidor real.
-- `make test-all`: executa unitários + integração.
-- `make test-ci`: executa validação completa local estilo CI (`fmt + build + test-all`).
-- `make smoke`: valida `/health`, `/api/hello` e `/metrics`.
-- `make bench`: benchmark Mercury x Go x Node.
-- `make bench-metrics`: executa `wrk` junto com coleta automática de métricas.
-- `make metrics-collect`: coleta `/metrics` em CSV por janela de tempo.
-- `make metrics-report`: gera resumo de CSV de métricas.
-- `make docker-build`: gera imagem Docker.
-- `make docker-up`: sobe container via Docker Compose.
-- `make docker-down`: remove stack local.
-- `make docker-logs`: acompanha logs do container.
+- Application: `http://localhost:8080`
+- Health check: `curl -i http://localhost:8080/health`
 
 ---
 
-## 📦 Licença
+## Make Targets
 
-Este projeto é **open source** sob a licença **MIT**.
-
-Consulte o arquivo [LICENSE](LICENSE) para os termos completos.
+- `make help`: list available commands.
+- `make build`: compile the binary.
+- `make run`: run server with configurable variables.
+- `make test`: run unit tests (`zig build test`).
+- `make test-unit`: run unit tests (`zig build test`).
+- `make test-integration`: run HTTP integration tests against a live server.
+- `make test-all`: run unit + integration tests.
+- `make test-ci`: full local CI pipeline (`fmt + build + test-all`).
+- `make smoke`: validate `/health`, `/api/hello`, and `/metrics`.
+- `make bench`: benchmark Mercury vs Go vs Node.
+- `make bench-metrics`: run `wrk` with automatic metrics collection.
+- `make metrics-collect`: collect `/metrics` to CSV over a time window.
+- `make metrics-report`: generate summary from a metrics CSV.
+- `make docker-build`: build Docker image.
+- `make docker-up`: start container via Docker Compose.
+- `make docker-down`: tear down local stack.
+- `make docker-logs`: follow container logs.
 
 ---
+
+## License
+
+This project is **open source** under the **MIT License**.
+
+See the [LICENSE](LICENSE) file for details.
+
+---
+
+## Contributing
+
+Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md) and [Code of Conduct](CODE_OF_CONDUCT.md) before getting started.
+
+For security vulnerabilities, please refer to our [Security Policy](SECURITY.md).
 
 <div align="center">
   Feito com Zig e foco em engenharia de baixo nível, observabilidade e evolução incremental.
