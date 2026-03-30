@@ -10,7 +10,8 @@ Esta branch contém somente os arquivos da landing page para publicação no Git
 │   ├── css/
 │   │   └── styles.css
 │   ├── data/
-│   │   └── content.json
+│   │   ├── content.en.json
+│   │   └── content.pt-BR.json
 │   └── js/
 │       └── main.js
 ├── .nojekyll
@@ -19,9 +20,20 @@ Esta branch contém somente os arquivos da landing page para publicação no Git
 
 ## Como manter conteúdo
 
-Todo o conteúdo textual da landing está centralizado em `assets/data/content.json`.
+Todo o conteúdo textual da landing está centralizado em JSON, separado por idioma:
 
-Alterações rotineiras (copy, links, títulos, cards, métricas, contribuição) devem ser feitas nesse arquivo.
+- `assets/data/content.pt-BR.json`
+- `assets/data/content.en.json`
+
+Alterações rotineiras (copy, links, títulos, cards, métricas, contribuição) devem ser feitas nesses arquivos.
+
+## Toggle de idioma
+
+A página possui seletor `PT | EN` no header.
+
+- O idioma inicial tenta usar `localStorage`.
+- Se não houver valor salvo, usa o idioma do navegador.
+- O conteúdo é recarregado dinamicamente sem alterar a estrutura HTML.
 
 ## Publicação no GitHub Pages
 

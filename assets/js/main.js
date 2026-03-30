@@ -1,4 +1,11 @@
-const CONTENT_URL = "assets/data/content.json";
+const SUPPORTED_LANGS = ["pt-BR", "en"];
+const DEFAULT_LANG = "pt-BR";
+const LANG_STORAGE_KEY = "mercury_landing_lang";
+let currentUi = null;
+
+function getContentUrl(lang) {
+  return `assets/data/content.${lang}.json`;
+}
 
 function setText(id, value) {
   const element = document.getElementById(id);
@@ -14,6 +21,16 @@ function setLink(element, link) {
   if (link.external) {
     element.target = "_blank";
     element.rel = "noreferrer";
+  } else {
+    element.removeAttribute("target");
+    element.removeAttribute("rel");
+  }
+}
+
+function clearElement(id) {
+  const element = document.getElementById(id);
+  if (element) {
+    element.innerHTML = "";
   }
 }
 
@@ -33,6 +50,7 @@ function setMetaTag(selector, content) {
 }
 
 function renderNav(links) {
+  clearElement("nav-menu-list");
   const list = document.getElementById("nav-menu-list");
   if (!list) return;
 
@@ -50,11 +68,13 @@ function renderHero(hero) {
   setText("hero-title", hero.title);
   setText("hero-description", hero.description);
 
+  clearElement("hero-actions");
   const actions = document.getElementById("hero-actions");
   if (actions) {
     hero.actions.forEach((action) => actions.appendChild(createButton(action)));
   }
 
+  clearElement("hero-meta");
   const heroMeta = document.getElementById("hero-meta");
   if (heroMeta) {
     hero.meta.forEach((item) => {
@@ -68,6 +88,7 @@ function renderHero(hero) {
 function renderTerminal(terminal) {
   setText("terminal-path", terminal.path);
 
+  clearElement("terminal-lines");
   const container = document.getElementById("terminal-lines");
   if (!container) return;
 
@@ -87,6 +108,7 @@ function renderFeatures(features) {
   setText("features-title", features.title);
   setText("features-description", features.description);
 
+  clearElement("features-grid");
   const grid = document.getElementById("features-grid");
   if (!grid) return;
 
@@ -110,6 +132,7 @@ function renderMetrics(metrics) {
   setText("metrics-title", metrics.title);
   setText("metrics-description", metrics.description);
 
+  clearElement("metrics-grid");
   const grid = document.getElementById("metrics-grid");
   if (!grid) return;
 
@@ -133,6 +156,7 @@ function renderContribution(contribution) {
   setText("contribution-title", contribution.title);
   setText("contribution-description", contribution.description);
 
+  clearElement("contribution-steps");
   const steps = document.getElementById("contribution-steps");
   if (steps) {
     contribution.steps.forEach((step, index) => {
@@ -142,10 +166,43 @@ function renderContribution(contribution) {
     });
   }
 
+  clearElement("contribution-actions");
   const actions = document.getElementById("contribution-actions");
   if (actions) {
     contribution.actions.forEach((action) => actions.appendChild(createButton(action)));
   }
+}
+
+function setActiveLangButton(lang) {
+  const buttons = document.querySelectorAll(".lang-btn");
+  buttons.forEach((button) => {
+    const isActive = button.dataset.lang === lang;
+    button.classList.toggle("is-active", isActive);
+    button.setAttribute("aria-pressed", isActive ? "true" : "false");
+  });
+}
+
+function normalizeLang(inputLang) {
+  if (!inputLang) return DEFAULT_LANG;
+
+  if (inputLang.toLowerCase().startsWith("pt")) {
+    return "pt-BR";
+  }
+
+  if (inputLang.toLowerCase().startsWith("en")) {
+    return "en";
+  }
+
+  return DEFAULT_LANG;
+}
+
+function getInitialLang() {
+  const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
+  if (SUPPORTED_LANGS.includes(stored)) {
+    return stored;
+  }
+
+  return normalizeLang(window.navigator.language);
 }
 
 function applyContent(content) {
@@ -161,6 +218,13 @@ function applyContent(content) {
   setMetaTag('meta[name="theme-color"]', content.meta.themeColor);
 
   setText("skip-link", content.ui.skipLink);
+  setText("footer-text", content.footer.text);
+  currentUi = content.ui || null;
+
+  const langToggle = document.getElementById("lang-toggle");
+  if (langToggle && content.ui.langToggleAria) {
+    langToggle.setAttribute("aria-label", content.ui.langToggleAria);
+  }
 
   const brandLogo = document.getElementById("brand-logo");
   if (brandLogo) {
@@ -179,27 +243,50 @@ function applyContent(content) {
   renderFeatures(content.features);
   renderMetrics(content.metrics);
   renderContribution(content.contribution);
-
-  setText("footer-text", content.footer.text);
 }
 
-async function initLanding() {
+async function loadContent(lang) {
+  const response = await fetch(getContentUrl(lang), { cache: "no-store" });
+  if (!response.ok) {
+    throw new Error(`JSON ${response.status}`);
+  }
+
+  return response.json();
+}
+
+async function switchLanguage(lang) {
   const status = document.getElementById("status");
+  const normalized = normalizeLang(lang);
 
   try {
-    const response = await fetch(CONTENT_URL, { cache: "no-store" });
-    if (!response.ok) {
-      throw new Error(`Falha ao carregar JSON (${response.status})`);
-    }
-
-    const content = await response.json();
+    const content = await loadContent(normalized);
     applyContent(content);
-    if (status) status.textContent = "";
+    setActiveLangButton(normalized);
+    window.localStorage.setItem(LANG_STORAGE_KEY, normalized);
+    if (status) {
+      status.textContent = "";
+    }
   } catch (error) {
     if (status) {
-      status.textContent = `Erro ao carregar conteúdo: ${error.message}`;
+      const prefix = currentUi?.loadErrorPrefix ||
+        (document.documentElement.lang === "en" ? "Failed to load content" : "Erro ao carregar conteúdo");
+      status.textContent = `${prefix}: ${error.message}`;
     }
   }
+}
+
+function setupLanguageToggle() {
+  const buttons = document.querySelectorAll(".lang-btn");
+  buttons.forEach((button) => {
+    button.addEventListener("click", () => {
+      switchLanguage(button.dataset.lang || DEFAULT_LANG);
+    });
+  });
+}
+
+function initLanding() {
+  setupLanguageToggle();
+  switchLanguage(getInitialLang());
 }
 
 initLanding();

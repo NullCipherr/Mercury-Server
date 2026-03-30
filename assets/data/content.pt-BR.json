@@ -9,7 +9,9 @@
     "themeColor": "#0b1020"
   },
   "ui": {
-    "skipLink": "Pular para o conteúdo principal"
+    "skipLink": "Pular para o conteúdo principal",
+    "langToggleAria": "Trocar idioma",
+    "loadErrorPrefix": "Erro ao carregar conteúdo"
   },
   "brand": {
     "name": "Mercury Server",
@@ -18,18 +20,9 @@
   },
   "navigation": {
     "links": [
-      {
-        "label": "Recursos",
-        "href": "#recursos"
-      },
-      {
-        "label": "Benchmark",
-        "href": "#metricas"
-      },
-      {
-        "label": "Contribuir",
-        "href": "#contribuicao"
-      },
+      { "label": "Recursos", "href": "#recursos" },
+      { "label": "Benchmark", "href": "#metricas" },
+      { "label": "Contribuir", "href": "#contribuicao" },
       {
         "label": "GitHub",
         "href": "https://github.com/NullCipherr/Mercury-Server",
@@ -70,42 +63,17 @@
   "terminal": {
     "path": "~/Mercury-Server",
     "lines": [
-      {
-        "text": "$ zig build run -- --port 8080",
-        "kind": "ok"
-      },
-      {
-        "text": "[INFO] Mercury Server started on 0.0.0.0:8080"
-      },
-      {
-        "text": "[INFO] workers=8 | static=./static"
-      },
-      {
-        "text": ""
-      },
-      {
-        "text": "$ curl http://localhost:8080/health",
-        "kind": "ok"
-      },
-      {
-        "text": "{\"status\":\"ok\"}"
-      },
-      {
-        "text": ""
-      },
-      {
-        "text": "$ curl http://localhost:8080/metrics",
-        "kind": "warn"
-      },
-      {
-        "text": "requests_total 18342"
-      },
-      {
-        "text": "errors_total 0"
-      },
-      {
-        "text": "avg_latency_ms 1.75"
-      }
+      { "text": "$ zig build run -- --port 8080", "kind": "ok" },
+      { "text": "[INFO] Mercury Server started on 0.0.0.0:8080" },
+      { "text": "[INFO] workers=8 | static=./static" },
+      { "text": "" },
+      { "text": "$ curl http://localhost:8080/health", "kind": "ok" },
+      { "text": "{\"status\":\"ok\"}" },
+      { "text": "" },
+      { "text": "$ curl http://localhost:8080/metrics", "kind": "warn" },
+      { "text": "requests_total 18342" },
+      { "text": "errors_total 0" },
+      { "text": "avg_latency_ms 1.75" }
     ]
   },
   "features": {
@@ -142,22 +110,10 @@
     "title": "Snapshot de benchmark oficial",
     "description": "Resultado de referência publicado no repositório (28/03/2026, America/Sao_Paulo).",
     "items": [
-      {
-        "value": "34.645",
-        "label": "RPS médio (Mercury)"
-      },
-      {
-        "value": "1.75 ms",
-        "label": "Latência média"
-      },
-      {
-        "value": "0.00%",
-        "label": "Taxa média de erro"
-      },
-      {
-        "value": "HTTP/1.1",
-        "label": "Protocolo implementado"
-      }
+      { "value": "34.645", "label": "RPS médio (Mercury)" },
+      { "value": "1.75 ms", "label": "Latência média" },
+      { "value": "0.00%", "label": "Taxa média de erro" },
+      { "value": "HTTP/1.1", "label": "Protocolo implementado" }
     ]
   },
   "contribution": {
