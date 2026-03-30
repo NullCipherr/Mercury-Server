@@ -1,0 +1,46 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    name: Build & Test
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: 0.14.0
+
+      - name: Check formatting
+        run: zig fmt --check src/*.zig build.zig
+
+      - name: Build
+        run: zig build
+
+      - name: Unit tests
+        run: zig build test
+
+      - name: Integration tests
+        if: runner.os == 'Linux'
+        run: |
+          PORT=18080 bash scripts/tests/integration_http.sh
+
+  docker:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: check
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build Docker image
+        run: docker build -t mercury-server:ci .
