@@ -32,33 +32,33 @@ RUN_ARGS := --host $(HOST) --port $(PORT) --port-retries $(PORT_RETRIES) --threa
 .PHONY: help build run test test-unit test-integration test-all test-ci fmt check smoke bench bench-quick bench-go bench-node bench-metrics metrics-collect metrics-report docker-build docker-up docker-down docker-logs clean clean-all
 
 help:
-	@echo "Mercury Server - comandos disponiveis"
+	@echo "Mercury Server - available commands"
 	@echo
-	@echo "  make build          Compila o projeto"
-	@echo "  make run            Executa o servidor com parametros padrao/variaveis"
-	@echo "  make test           Alias para make test-unit"
-	@echo "  make test-unit      Roda testes unitarios (zig build test)"
-	@echo "  make test-integration Roda testes de integracao HTTP com servidor real"
-	@echo "  make test-all       Executa suite completa: unitario + integracao"
-	@echo "  make test-ci        Pipeline local estilo CI (fmt + build + test-all)"
-	@echo "  make fmt            Formata codigo Zig"
-	@echo "  make check          Executa fmt + build + test-all"
-	@echo "  make smoke          Sobe servidor temporario e testa /health /api/hello /metrics"
-	@echo "  make bench          Executa benchmark comparativo (Mercury/Go/Node)"
-	@echo "  make bench-quick    Benchmark rapido"
-	@echo "  make bench-metrics  Executa wrk + coleta de metricas em paralelo"
-	@echo "  make metrics-collect Coleta /metrics periodicamente em CSV"
-	@echo "  make metrics-report Gera resumo de um CSV de metricas (METRICS_FILE=...)"
-	@echo "  make bench-go       Sobe servidor Go de benchmark"
-	@echo "  make bench-node     Sobe servidor Node de benchmark"
-	@echo "  make docker-build   Gera imagem Docker do Mercury Server"
-	@echo "  make docker-up      Sobe Mercury Server via Docker Compose (detached)"
-	@echo "  make docker-down    Derruba stack Docker Compose"
-	@echo "  make docker-logs    Acompanha logs do Mercury Server em Docker"
-	@echo "  make clean          Remove artefatos locais"
-	@echo "  make clean-all      Limpeza completa (inclui logs de benchmark)"
+	@echo "  make build            Build the project"
+	@echo "  make run              Run the server with default/custom parameters"
+	@echo "  make test             Alias for make test-unit"
+	@echo "  make test-unit        Run unit tests (zig build test)"
+	@echo "  make test-integration Run HTTP integration tests against a live server"
+	@echo "  make test-all         Run full suite: unit + integration"
+	@echo "  make test-ci          Local CI pipeline (fmt + build + test-all)"
+	@echo "  make fmt              Format Zig source code"
+	@echo "  make check            Run fmt + build + test-all"
+	@echo "  make smoke            Start a temporary server and test /health /api/hello /metrics"
+	@echo "  make bench            Run comparative benchmark (Mercury/Go/Node)"
+	@echo "  make bench-quick      Quick benchmark run"
+	@echo "  make bench-metrics    Run wrk + collect metrics in parallel"
+	@echo "  make metrics-collect  Periodically collect /metrics to CSV"
+	@echo "  make metrics-report   Generate summary from a metrics CSV (METRICS_FILE=...)"
+	@echo "  make bench-go         Start Go benchmark server"
+	@echo "  make bench-node       Start Node benchmark server"
+	@echo "  make docker-build     Build Mercury Server Docker image"
+	@echo "  make docker-up        Start Mercury Server via Docker Compose (detached)"
+	@echo "  make docker-down      Stop Docker Compose stack"
+	@echo "  make docker-logs      Follow Mercury Server logs in Docker"
+	@echo "  make clean            Remove local build artifacts"
+	@echo "  make clean-all        Full cleanup (includes benchmark logs)"
 	@echo
-	@echo "Variaveis uteis (exemplo):"
+	@echo "Useful variables (example):"
 	@echo "  make run PORT=9090 THREADS=8"
 	@echo "  make bench BENCH_THREADS=8 BENCH_CONNECTIONS=128 BENCH_ROUNDS=3"
 
@@ -96,7 +96,7 @@ smoke:
 	curl -fsS http://127.0.0.1:$(PORT)/metrics; echo; \
 	kill $$PID >/dev/null 2>&1 || true; \
 	wait $$PID >/dev/null 2>&1 || true; \
-	echo "Smoke test concluido com sucesso."
+	echo "Smoke test completed successfully."
 
 bench:
 	THREADS=$(BENCH_THREADS) CONNECTIONS=$(BENCH_CONNECTIONS) DURATION=$(BENCH_DURATION) WARMUP=$(BENCH_WARMUP) ROUNDS=$(BENCH_ROUNDS) CLOSE_CONNECTION=$(BENCH_CLOSE_CONNECTION) bash benchmarks/run.sh
@@ -111,7 +111,7 @@ metrics-collect:
 	METRICS_URL=$(METRICS_URL) DURATION_SEC=$(METRICS_DURATION_SEC) INTERVAL_SEC=$(METRICS_INTERVAL_SEC) OUTPUT_FILE="$(METRICS_OUTPUT)" bash scripts/metrics/collect_metrics.sh
 
 metrics-report:
-	@test -n "$(METRICS_FILE)" || (echo "Defina METRICS_FILE=<arquivo_csv>"; exit 1)
+	@test -n "$(METRICS_FILE)" || (echo "Set METRICS_FILE=<csv_file>"; exit 1)
 	bash scripts/metrics/report_metrics_csv.sh "$(METRICS_FILE)"
 
 bench-go:
