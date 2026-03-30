@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/favicon.svg" alt="Mercury Server Landing" width="110" />
   <h1>Mercury Server Landing</h1>
-  <p><i>Landing page oficial do Mercury Server para GitHub Pages, com i18n, SEO técnico e arquitetura estática modular.</i></p>
+  <p><i>Official Mercury Server landing page for GitHub Pages, with i18n, technical SEO, and a modular static architecture.</i></p>
 
   <p>
     <img src="https://img.shields.io/badge/Stack-HTML%20%7C%20CSS%20%7C%20JS-0ea5e9?style=flat-square" alt="Stack" />
@@ -10,42 +10,44 @@
   </p>
 </div>
 
----
-
-## Visão Geral
-
-Esta branch (`gh-pages`) isola a camada de apresentação pública do projeto, sem acoplamento ao código do servidor.
-
-Objetivos da landing:
-
-- comunicar proposta de valor do Mercury Server;
-- apresentar recursos e benchmark com contexto técnico;
-- facilitar contribuição open source;
-- entregar base com SEO técnico forte para indexação e compartilhamento.
+> Language: **English (default)** | [Português (pt-BR)](./README.pt-BR.md)
 
 ---
 
-## Principais Recursos
+## Overview
 
-- Layout estático modular (`index.html` + CSS + JS).
-- Conteúdo centralizado em JSON por idioma.
-- Fontes self-hosted (`assets/fonts`) com `font-display: swap`.
-- Imagem Open Graph dedicada 1200x630 (`assets/og`) com WebP + fallback PNG.
-- Toggle de idioma com persistência (`localStorage`) e suporte por query string (`?lang=pt-BR`).
-- Pipeline de build otimizado com minificação e hash de CSS/JS (`npm run build`).
-- Monitoramento sintético e auditoria Lighthouse em produção via GitHub Actions.
-- SEO técnico com:
-  - Open Graph completo;
+This branch (`gh-pages`) isolates the public presentation layer of Mercury Server without coupling to the server runtime code.
+
+Landing page goals:
+
+- communicate Mercury Server's value proposition;
+- present features and benchmark context with technical clarity;
+- streamline open source contribution entry points;
+- provide a strong technical SEO baseline for indexation and sharing.
+
+---
+
+## Key Features
+
+- Modular static layout (`index.html` + CSS + JS).
+- Content centralized in per-language JSON files.
+- Self-hosted fonts (`assets/fonts`) with `font-display: swap`.
+- Dedicated Open Graph image 1200x630 (`assets/og`) with WebP + PNG fallback.
+- Language toggle with persistence (`localStorage`) and query-string support (`?lang=pt-BR`).
+- Optimized build pipeline with CSS/JS minification and hashed assets (`npm run build`).
+- Synthetic monitoring and production Lighthouse audits via GitHub Actions.
+- Technical SEO with:
+  - full Open Graph tags;
   - Twitter Cards;
-  - canonical dinâmico;
+  - dynamic canonical;
   - `hreflang`;
   - JSON-LD (`SoftwareSourceCode`);
-  - `robots.txt` e `sitemap.xml`.
-- Estrutura pronta para GitHub Pages com `.nojekyll`.
+  - `robots.txt` and `sitemap.xml`.
+- GitHub Pages ready setup with `.nojekyll`.
 
 ---
 
-## Estrutura do Projeto
+## Project Structure
 
 ```text
 .
@@ -83,55 +85,55 @@ Objetivos da landing:
 
 ---
 
-## Documentação
+## Documentation
 
-- [Índice da documentação do site](docs/README.md)
-- [Arquitetura do site](docs/SITE_ARCHITECTURE.md)
-- [SEO técnico](docs/SEO_TECHNICAL_GUIDE.md)
-- [Conteúdo e i18n](docs/CONTENT_AND_I18N.md)
-- [Deploy no GitHub Pages](docs/DEPLOY_GITHUB_PAGES.md)
-- [Checklist de performance pré-deploy](docs/PERFORMANCE_DEPLOY_CHECKLIST.md)
+- [Documentation index](docs/README.md)
+- [Site architecture](docs/SITE_ARCHITECTURE.md)
+- [Technical SEO](docs/SEO_TECHNICAL_GUIDE.md)
+- [Content and i18n](docs/CONTENT_AND_I18N.md)
+- [GitHub Pages deploy](docs/DEPLOY_GITHUB_PAGES.md)
+- [Pre-deploy performance checklist](docs/PERFORMANCE_DEPLOY_CHECKLIST.md)
 
 ---
 
-## Desenvolvimento Local
+## Local Development
 
-Instalação:
+Install dependencies:
 
 ```bash
 npm install
 ```
 
-Build otimizado (minify + hash):
+Run optimized build (minify + hash):
 
 ```bash
 npm run build
 ```
 
-Preview simples do projeto-fonte (sem build):
+Simple source preview (without build):
 
 ```bash
 python -m http.server 8080
 ```
 
-Acesse:
+Open:
 
 - `http://localhost:8080/`
 
 ---
 
-## Fluxo de Conteúdo
+## Content Workflow
 
-Todo conteúdo textual é mantido em:
+All textual content is managed in:
 
 - `assets/data/content.en.json`
 - `assets/data/content.pt-BR.json`
 
-Boas práticas de edição:
+Editing best practices:
 
-1. Alterar conteúdo no JSON do idioma correspondente.
-2. Manter a mesma estrutura de chaves entre idiomas.
-3. Validar JSON antes do commit:
+1. Update content in the corresponding language JSON.
+2. Keep the same key structure across locales.
+3. Validate JSON before committing:
 
 ```bash
 jq empty assets/data/content.en.json
@@ -140,45 +142,45 @@ jq empty assets/data/content.pt-BR.json
 
 ---
 
-## SEO e Indexação
+## SEO and Indexation
 
-Arquivos e configurações relevantes:
+Relevant files/configuration:
 
-- metadados em `index.html` + atualização dinâmica em `assets/js/main.js`;
+- metadata in `index.html` + dynamic updates in `assets/js/main.js`;
 - `robots.txt`;
 - `sitemap.xml`.
 
-Antes de publicar, valide:
+Before publishing, validate:
 
-1. URL canônica final (`siteUrl` em `assets/data/content.*.json`).
-2. Preview Open Graph/Twitter.
-3. Lighthouse (SEO, Acessibilidade, Performance).
-4. OG dedicada (`assets/og/og-image.webp` e `assets/og/og-image.png`).
+1. Final canonical URL (`siteUrl` in `assets/data/content.*.json`).
+2. Open Graph / Twitter preview.
+3. Lighthouse (SEO, Accessibility, Performance).
+4. Dedicated OG assets (`assets/og/og-image.webp` and `assets/og/og-image.png`).
 
 ---
 
 ## Deploy
 
-Referência completa: [Deploy no GitHub Pages](docs/DEPLOY_GITHUB_PAGES.md)
+Full reference: [Deploy on GitHub Pages](docs/DEPLOY_GITHUB_PAGES.md)
 
-Resumo:
+Summary:
 
 1. `npm run build`
-2. publicar conteúdo de `dist/` na branch de deploy
+2. publish `dist/` content to the deploy branch
 3. GitHub `Settings > Pages`
-4. `Deploy from a branch` com branch `gh-pages`
+4. `Deploy from a branch` using `gh-pages`
 
 ---
 
-## Manutenção Recomendada
+## Recommended Maintenance
 
-- revisar periodicamente dados de benchmark exibidos na landing;
-- manter links de docs e comunidade atualizados;
-- rodar auditoria Lighthouse após mudanças visuais maiores;
-- atualizar `sitemap.xml` caso novas rotas públicas sejam adicionadas.
+- periodically review benchmark numbers shown on the landing;
+- keep docs and community links up to date;
+- run Lighthouse audits after major visual updates;
+- update `sitemap.xml` whenever new public routes are added.
 
 ---
 
-## Licença
+## License
 
-O conteúdo desta landing acompanha o projeto principal Mercury Server e segue a política de licença definida no repositório.
+This landing page follows the licensing policy defined in the main Mercury Server repository.
