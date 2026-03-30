@@ -1,48 +1,105 @@
 <!doctype html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mercury Server</title>
-  <meta name="description" content="Landing page do Mercury Server" />
-  <meta property="og:title" content="Mercury Server" />
-  <meta property="og:description" content="Projeto open source em Zig" />
-  <meta property="og:type" content="website" />
-  <meta property="og:image" content="https://raw.githubusercontent.com/NullCipherr/Mercury-Server/main/docs/assets/mercury-logo.png" />
-  <meta name="theme-color" content="#0b1020" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
-    rel="stylesheet"
+  <title>Mercury Server | HTTP/1.1 in Zig for production workloads</title>
+  <meta
+    name="description"
+    content="Mercury Server is an open-source HTTP/1.1 server in Zig with hand-written parsing, connection pooling, and real-time metrics."
   />
+  <meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1,max-video-preview:-1" />
+  <link rel="canonical" id="canonical-link" href="https://nullcipherr.github.io/Mercury-Server/" />
+
+  <meta property="og:site_name" content="Mercury Server" />
+  <meta property="og:title" content="Mercury Server | HTTP/1.1 in Zig for production workloads" />
+  <meta
+    property="og:description"
+    content="Open-source HTTP/1.1 server in Zig focused on predictable performance and observability."
+  />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" id="og-url" content="https://nullcipherr.github.io/Mercury-Server/" />
+  <meta property="og:locale" id="og-locale" content="en_US" />
+  <meta
+    property="og:image"
+    id="og-image-webp"
+    content="https://nullcipherr.github.io/Mercury-Server/assets/og/og-image.webp"
+  />
+  <meta property="og:image:type" id="og-image-webp-type" content="image/webp" />
+  <meta
+    property="og:image"
+    id="og-image-fallback"
+    content="https://nullcipherr.github.io/Mercury-Server/assets/og/og-image.png"
+  />
+  <meta property="og:image:type" id="og-image-fallback-type" content="image/png" />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:image:alt" content="Mercury Server, servidor HTTP/1.1 em Zig para produção" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" id="twitter-title" content="Mercury Server | HTTP/1.1 in Zig for production workloads" />
+  <meta
+    name="twitter:description"
+    id="twitter-description"
+    content="Open-source HTTP/1.1 server in Zig focused on predictable performance and observability."
+  />
+  <meta
+    name="twitter:image"
+    id="twitter-image"
+    content="https://nullcipherr.github.io/Mercury-Server/assets/og/og-image.png"
+  />
+
+  <link rel="alternate" hreflang="en" href="https://nullcipherr.github.io/Mercury-Server/" />
+  <link rel="alternate" hreflang="pt-BR" href="https://nullcipherr.github.io/Mercury-Server/?lang=pt-BR" />
+  <link rel="alternate" hreflang="x-default" href="https://nullcipherr.github.io/Mercury-Server/" />
+
+  <meta name="theme-color" content="#0b1020" />
+  <meta name="color-scheme" content="dark" />
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/space-grotesk-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin />
+  <link rel="preload" href="assets/fonts/ibm-plex-mono-latin-500-normal.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="stylesheet" href="assets/css/styles.css" />
+  <script id="structured-data" type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareSourceCode",
+      "name": "Mercury Server",
+      "url": "https://nullcipherr.github.io/Mercury-Server/",
+      "codeRepository": "https://github.com/NullCipherr/Mercury-Server",
+      "programmingLanguage": "Zig",
+      "license": "https://github.com/NullCipherr/Mercury-Server/blob/main/LICENSE"
+    }
+  </script>
 </head>
 <body>
-  <a class="skip-link" href="#conteudo" id="skip-link"></a>
+  <a class="skip-link" href="#main-content" id="skip-link"></a>
 
   <header>
-    <div class="container nav" role="navigation" aria-label="Menu principal">
-      <a class="brand" href="#topo" id="topo">
-        <img id="brand-logo" src="" alt="Logo do projeto" />
+    <div class="container nav" role="navigation" aria-label="Main menu">
+      <a class="brand" href="#top" id="top">
+        <img id="brand-logo" src="" alt="Project logo" />
         <span id="brand-name"></span>
       </a>
 
-      <nav class="menu" aria-label="Seções da página">
+      <nav class="menu" aria-label="Page sections">
         <ul id="nav-menu-list" class="menu-list"></ul>
       </nav>
 
-      <div class="nav-actions">
-        <div class="lang-toggle" id="lang-toggle" role="group" aria-label="Trocar idioma">
+      <div class="nav-utilities">
+        <div class="lang-toggle" id="lang-toggle" role="group" aria-label="Change language">
           <button type="button" class="lang-btn" data-lang="pt-BR">PT</button>
           <button type="button" class="lang-btn" data-lang="en">EN</button>
         </div>
+      </div>
+
+      <div class="nav-actions">
         <a class="btn btn-primary" id="repo-button" href="#"></a>
       </div>
     </div>
   </header>
 
-  <main id="conteudo">
+  <main id="main-content">
     <section class="hero">
       <div class="container hero-grid">
         <div>
@@ -51,10 +108,10 @@
           <p id="hero-description"></p>
 
           <div class="hero-actions" id="hero-actions"></div>
-          <div class="hero-meta" id="hero-meta" aria-label="Resumo técnico"></div>
+          <div class="hero-meta" id="hero-meta" aria-label="Technical summary"></div>
         </div>
 
-        <aside class="terminal" aria-label="Preview de execução no terminal">
+        <aside class="terminal" aria-label="Terminal execution preview">
           <div class="terminal-header">
             <div class="dots" aria-hidden="true">
               <span class="dot"></span>
@@ -68,7 +125,7 @@
       </div>
     </section>
 
-    <section id="recursos">
+    <section id="features">
       <div class="container">
         <div class="section-head">
           <h2 id="features-title"></h2>
@@ -78,39 +135,78 @@
       </div>
     </section>
 
-    <section id="metricas">
+    <section id="benchmark">
       <div class="container">
         <div class="section-head">
           <h2 id="metrics-title"></h2>
           <p id="metrics-description"></p>
         </div>
-        <div class="metrics" id="metrics-grid" aria-label="Resumo de benchmark"></div>
+        <div class="metrics" id="metrics-grid" aria-label="Benchmark summary"></div>
+        <div class="benchmark-extra">
+          <article class="benchmark-card">
+            <h3 id="benchmark-context-title"></h3>
+            <ul id="benchmark-context-list" class="benchmark-list"></ul>
+          </article>
+          <article class="benchmark-card">
+            <h3 id="benchmark-comparison-title"></h3>
+            <div id="benchmark-comparison-grid" class="benchmark-comparison-grid"></div>
+          </article>
+        </div>
       </div>
     </section>
 
-    <section id="contribuicao">
+    <section id="contribute">
       <div class="container contribute">
         <div class="section-head">
           <h2 id="contribution-title"></h2>
           <p id="contribution-description"></p>
         </div>
+        <div class="contribute-layout">
+          <div class="contribute-main">
+            <ol class="steps" id="contribution-steps"></ol>
+            <div class="cta-row" id="contribution-actions"></div>
+          </div>
 
-        <ol class="steps" id="contribution-steps"></ol>
-        <div class="cta-row" id="contribution-actions"></div>
+          <aside class="contribute-panel">
+            <div class="contribute-panel-section">
+              <h3 id="contribution-panel-title"></h3>
+              <p id="contribution-panel-description"></p>
+            </div>
+            <ul class="contribute-links" id="contribution-panel-links"></ul>
+
+            <div class="contribute-panel-section">
+              <h3 id="contribution-checklist-title"></h3>
+              <ul class="contribute-checklist" id="contribution-checklist"></ul>
+            </div>
+          </aside>
+        </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container" id="footer-text"></div>
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-top">
+        <div class="footer-brand-block">
+          <h2 id="footer-brand-name"></h2>
+          <p id="footer-description"></p>
+          <div class="footer-badges" id="footer-badges"></div>
+        </div>
+        <div class="footer-link-groups" id="footer-link-groups"></div>
+      </div>
+
+      <div class="footer-bottom">
+        <p id="footer-legal"></p>
+        <div class="footer-bottom-links" id="footer-bottom-links"></div>
+      </div>
+    </div>
   </footer>
 
   <p class="status" id="status" role="status" aria-live="polite"></p>
 
   <noscript>
-    <p class="noscript">Ative JavaScript para carregar o conteúdo da landing page.</p>
+    <p class="noscript">Enable JavaScript to load the landing page content.</p>
   </noscript>
-
   <script src="assets/js/main.js" defer></script>
 </body>
 </html>

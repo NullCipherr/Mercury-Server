@@ -1,0 +1,23 @@
+{
+  "name": "mercury-server-landing",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Landing page estática do Mercury Server com pipeline de build e auditoria de performance.",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "build:clean": "rm -rf dist",
+    "lighthouse:prod": "lhci autorun --config=./lighthouserc.cjs",
+    "lighthouse:collect": "lhci collect --config=./lighthouserc.cjs",
+    "monitor:uptime": "node scripts/uptime-check.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/NullCipherr/Mercury-Server.git"
+  },
+  "license": "ISC",
+  "devDependencies": {
+    "@lhci/cli": "^0.15.1",
+    "esbuild": "^0.27.4",
+    "lighthouse": "^13.0.3"
+  }
+}

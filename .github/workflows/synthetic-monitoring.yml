@@ -1,0 +1,28 @@
+name: Synthetic Monitoring
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "*/15 * * * *"
+
+jobs:
+  uptime:
+    runs-on: ubuntu-latest
+    env:
+      MONITOR_URL: https://nullcipherr.github.io/Mercury-Server/
+      MONITOR_TTFB_THRESHOLD_MS: "1200"
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check uptime and TTFB regression
+        run: npm run monitor:uptime

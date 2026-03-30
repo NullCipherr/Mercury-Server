@@ -1,0 +1,36 @@
+name: Lighthouse Production
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1"
+  push:
+    branches:
+      - gh-pages
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    env:
+      LIGHTHOUSE_URL: https://nullcipherr.github.io/Mercury-Server/
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Setup Chrome
+        id: setup-chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Run Lighthouse CI
+        env:
+          CHROME_PATH: ${{ steps.setup-chrome.outputs.chrome-path }}
+        run: npm run lighthouse:prod

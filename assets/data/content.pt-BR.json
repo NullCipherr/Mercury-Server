@@ -5,8 +5,10 @@
     "description": "Mercury Server é um servidor HTTP/1.1 em Zig com parser manual, pool de conexões e métricas em tempo real. Explore docs, benchmark e contribua no GitHub.",
     "ogTitle": "Mercury Server",
     "ogDescription": "Servidor HTTP/1.1 em Zig com foco em performance, previsibilidade e observabilidade.",
-    "ogImage": "https://raw.githubusercontent.com/NullCipherr/Mercury-Server/main/docs/assets/mercury-logo.png",
-    "themeColor": "#0b1020"
+    "ogImage": "https://nullcipherr.github.io/Mercury-Server/assets/og/og-image.webp",
+    "ogImageFallback": "https://nullcipherr.github.io/Mercury-Server/assets/og/og-image.png",
+    "themeColor": "#0b1020",
+    "siteUrl": "https://nullcipherr.github.io/Mercury-Server/"
   },
   "ui": {
     "skipLink": "Pular para o conteúdo principal",
@@ -16,13 +18,22 @@
   "brand": {
     "name": "Mercury Server",
     "logoAlt": "Logo do Mercury Server",
-    "logoUrl": "https://raw.githubusercontent.com/NullCipherr/Mercury-Server/main/docs/assets/mercury-logo.png"
+    "logoUrl": "assets/favicon.svg"
   },
   "navigation": {
     "links": [
-      { "label": "Recursos", "href": "#recursos" },
-      { "label": "Benchmark", "href": "#metricas" },
-      { "label": "Contribuir", "href": "#contribuicao" },
+      {
+        "label": "Recursos",
+        "href": "#features"
+      },
+      {
+        "label": "Benchmark",
+        "href": "#benchmark"
+      },
+      {
+        "label": "Contribuir",
+        "href": "#contribute"
+      },
       {
         "label": "GitHub",
         "href": "https://github.com/NullCipherr/Mercury-Server",
@@ -63,17 +74,42 @@
   "terminal": {
     "path": "~/Mercury-Server",
     "lines": [
-      { "text": "$ zig build run -- --port 8080", "kind": "ok" },
-      { "text": "[INFO] Mercury Server started on 0.0.0.0:8080" },
-      { "text": "[INFO] workers=8 | static=./static" },
-      { "text": "" },
-      { "text": "$ curl http://localhost:8080/health", "kind": "ok" },
-      { "text": "{\"status\":\"ok\"}" },
-      { "text": "" },
-      { "text": "$ curl http://localhost:8080/metrics", "kind": "warn" },
-      { "text": "requests_total 18342" },
-      { "text": "errors_total 0" },
-      { "text": "avg_latency_ms 1.75" }
+      {
+        "text": "$ zig build run -- --port 8080",
+        "kind": "ok"
+      },
+      {
+        "text": "[INFO] Mercury Server started on 0.0.0.0:8080"
+      },
+      {
+        "text": "[INFO] workers=8 | static=./static"
+      },
+      {
+        "text": ""
+      },
+      {
+        "text": "$ curl http://localhost:8080/health",
+        "kind": "ok"
+      },
+      {
+        "text": "{\"status\":\"ok\"}"
+      },
+      {
+        "text": ""
+      },
+      {
+        "text": "$ curl http://localhost:8080/metrics",
+        "kind": "warn"
+      },
+      {
+        "text": "requests_total 18342"
+      },
+      {
+        "text": "errors_total 0"
+      },
+      {
+        "text": "avg_latency_ms 1.75"
+      }
     ]
   },
   "features": {
@@ -110,20 +146,66 @@
     "title": "Snapshot de benchmark oficial",
     "description": "Resultado de referência publicado no repositório (28/03/2026, America/Sao_Paulo).",
     "items": [
-      { "value": "34.645", "label": "RPS médio (Mercury)" },
-      { "value": "1.75 ms", "label": "Latência média" },
-      { "value": "0.00%", "label": "Taxa média de erro" },
-      { "value": "HTTP/1.1", "label": "Protocolo implementado" }
+      {
+        "value": "34.645",
+        "label": "RPS médio (Mercury)"
+      },
+      {
+        "value": "1.75 ms",
+        "label": "Latência média"
+      },
+      {
+        "value": "0.00%",
+        "label": "Taxa média de erro"
+      },
+      {
+        "value": "HTTP/1.1",
+        "label": "Protocolo implementado"
+      }
+    ],
+    "contextTitle": "Contexto do teste",
+    "contextItems": [
+      "Data: 28/03/2026 (America/Sao_Paulo).",
+      "Perfil de carga: 4 threads, 64 conexões, duração de 8s, warmup de 3s, 2 rodadas.",
+      "Modo de conexão: keep-alive habilitado (CLOSE_CONNECTION=0).",
+      "Ferramentas: benchmark com wrk e artefatos automáticos em benchmarks/results."
+    ],
+    "comparisonTitle": "Comparativo rápido",
+    "comparisonItems": [
+      {
+        "name": "Mercury",
+        "summary": "34.645 RPS | 1.75 ms latência média"
+      },
+      {
+        "name": "Go",
+        "summary": "145.293 RPS | 0.63 ms latência média"
+      },
+      {
+        "name": "Node",
+        "summary": "74.362 RPS | 0.90 ms latência média"
+      }
     ]
   },
   "contribution": {
-    "title": "Contribuição: entre rápido e com contexto",
-    "description": "Quer melhorar parser, observabilidade, testes ou docs? O projeto está aberto para PRs técnicas e incrementais. O fluxo é simples e já documentado para facilitar onboarding.",
+    "title": "Contribua com clareza e impacto",
+    "description": "Seja em parser, observabilidade, testes ou documentação, esta seção organiza um fluxo previsível de contribuição.",
     "steps": [
-      "Leia o guia em CONTRIBUTING.md e alinhe escopo da mudança.",
-      "Faça um fork e crie branch com prefixo descritivo (ex.: feat/...).",
-      "Rode os checks locais com zig build test e scripts de validação.",
-      "Abra PR com contexto técnico, trade-offs e evidências de teste."
+      {
+        "title": "Alinhe o escopo antes de codar",
+        "description": "Leia CONTRIBUTING.md e defina uma mudança pequena, revisável e com intenção técnica clara."
+      },
+      {
+        "title": "Crie uma branch focada",
+        "description": "Faça fork do repositório e use um nome descritivo, como feat/parser-header-limit."
+      },
+      {
+        "title": "Rode os gates locais",
+        "description": "Execute zig build test e scripts relacionados, anexando evidências dos checks."
+      },
+      {
+        "title": "Abra PR com contexto",
+        "description": "Explique trade-offs, riscos e comportamento esperado para acelerar a revisão."
+      }
     ],
     "actions": [
       {
@@ -144,9 +226,122 @@
         "variant": "ghost",
         "external": true
       }
+    ],
+    "panel": {
+      "title": "Canais da comunidade",
+      "description": "Use o canal certo para cada colaboração e reduza o tempo de revisão.",
+      "links": [
+        {
+          "label": "Bugs (Issues)",
+          "href": "https://github.com/NullCipherr/Mercury-Server/issues",
+          "external": true
+        },
+        {
+          "label": "Propostas de feature",
+          "href": "https://github.com/NullCipherr/Mercury-Server/issues/new",
+          "external": true
+        },
+        {
+          "label": "Padrões da comunidade",
+          "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/CODE_OF_CONDUCT.md",
+          "external": true
+        }
+      ]
+    },
+    "checklistTitle": "Checklist de PR",
+    "checklist": [
+      "Objetivo explícito e bem delimitado.",
+      "Testes e validações locais anexados.",
+      "Mudanças breaking documentadas.",
+      "Impacto operacional descrito."
     ]
   },
   "footer": {
-    "text": "Mercury Server é software livre sob licença MIT. Construído para estudo sério de redes, concorrência e engenharia de backend em Zig."
+    "description": "Servidor HTTP/1.1 low-level em Zig, desenhado para performance previsível, observabilidade e evolução prática em produção.",
+    "badges": [
+      "Licença MIT",
+      "Zig 0.14+",
+      "Open Source"
+    ],
+    "groups": [
+      {
+        "title": "Projeto",
+        "links": [
+          {
+            "label": "Repositório",
+            "href": "https://github.com/NullCipherr/Mercury-Server",
+            "external": true
+          },
+          {
+            "label": "Roadmap",
+            "href": "https://github.com/NullCipherr/Mercury-Server/tree/main/docs/pt-br",
+            "external": true
+          },
+          {
+            "label": "Releases",
+            "href": "https://github.com/NullCipherr/Mercury-Server/releases",
+            "external": true
+          }
+        ]
+      },
+      {
+        "title": "Recursos",
+        "links": [
+          {
+            "label": "Documentação",
+            "href": "https://github.com/NullCipherr/Mercury-Server/tree/main/docs",
+            "external": true
+          },
+          {
+            "label": "Arquitetura",
+            "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/docs/pt-br/ARQUITETURA.md",
+            "external": true
+          },
+          {
+            "label": "API",
+            "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/docs/pt-br/API.md",
+            "external": true
+          }
+        ]
+      },
+      {
+        "title": "Comunidade",
+        "links": [
+          {
+            "label": "Contribuição",
+            "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/CONTRIBUTING.md",
+            "external": true
+          },
+          {
+            "label": "Código de Conduta",
+            "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/CODE_OF_CONDUCT.md",
+            "external": true
+          },
+          {
+            "label": "Issues Abertas",
+            "href": "https://github.com/NullCipherr/Mercury-Server/issues",
+            "external": true
+          }
+        ]
+      }
+    ],
+    "legalText": "Mercury Server é software livre sob licença MIT.",
+    "bottomLinks": [
+      {
+        "label": "Segurança",
+        "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/SECURITY.md",
+        "external": true
+      },
+      {
+        "label": "Licença",
+        "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/LICENSE",
+        "external": true
+      },
+      {
+        "label": "Changelog",
+        "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/CHANGELOG.md",
+        "external": true
+      }
+    ]
   }
 }

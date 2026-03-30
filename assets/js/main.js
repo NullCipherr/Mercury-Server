@@ -1,8 +1,11 @@
 const SUPPORTED_LANGS = ["pt-BR", "en"];
-const DEFAULT_LANG = "pt-BR";
+const DEFAULT_LANG = "en";
 const LANG_STORAGE_KEY = "mercury_landing_lang";
+const LANG_QUERY_PARAM = "lang";
 let currentUi = null;
 
+// Company standard: each locale ships as an independent static JSON file
+// so content updates can happen without touching layout code.
 function getContentUrl(lang) {
   return `assets/data/content.${lang}.json`;
 }
@@ -27,6 +30,8 @@ function setLink(element, link) {
   }
 }
 
+// Company standard: clear container nodes before each render to avoid
+// duplicated UI blocks after language switches.
 function clearElement(id) {
   const element = document.getElementById(id);
   if (element) {
@@ -47,6 +52,55 @@ function setMetaTag(selector, content) {
   if (element && content) {
     element.setAttribute("content", content);
   }
+}
+
+function setLinkHref(selector, href) {
+  const element = document.querySelector(selector);
+  if (element && href) {
+    element.setAttribute("href", href);
+  }
+}
+
+function getSiteBaseUrl(content) {
+  return content?.meta?.siteUrl || "https://nullcipherr.github.io/Mercury-Server/";
+}
+
+function getPublicUrlForLang(content, lang) {
+  const base = new URL(getSiteBaseUrl(content));
+  if (lang && lang !== DEFAULT_LANG) {
+    base.searchParams.set(LANG_QUERY_PARAM, lang);
+  } else {
+    base.searchParams.delete(LANG_QUERY_PARAM);
+  }
+  return base.toString();
+}
+
+function setStructuredData(content, lang) {
+  const node = document.getElementById("structured-data");
+  if (!node) return;
+
+  const data = {
+    "@context": "https://schema.org",
+    "@type": "SoftwareSourceCode",
+    name: content.brand?.name || "Mercury Server",
+    url: getPublicUrlForLang(content, lang),
+    codeRepository: "https://github.com/NullCipherr/Mercury-Server",
+    programmingLanguage: "Zig",
+    license: "https://github.com/NullCipherr/Mercury-Server/blob/main/LICENSE",
+    description: content.meta?.description || ""
+  };
+
+  node.textContent = JSON.stringify(data);
+}
+
+function updateBrowserUrl(lang) {
+  const url = new URL(window.location.href);
+  if (lang === DEFAULT_LANG) {
+    url.searchParams.delete(LANG_QUERY_PARAM);
+  } else {
+    url.searchParams.set(LANG_QUERY_PARAM, lang);
+  }
+  window.history.replaceState({}, "", `${url.pathname}${url.search}${url.hash}`);
 }
 
 function renderNav(links) {
@@ -131,6 +185,8 @@ function renderFeatures(features) {
 function renderMetrics(metrics) {
   setText("metrics-title", metrics.title);
   setText("metrics-description", metrics.description);
+  setText("benchmark-context-title", metrics.contextTitle);
+  setText("benchmark-comparison-title", metrics.comparisonTitle);
 
   clearElement("metrics-grid");
   const grid = document.getElementById("metrics-grid");
@@ -150,18 +206,61 @@ function renderMetrics(metrics) {
     article.appendChild(label);
     grid.appendChild(article);
   });
+
+  clearElement("benchmark-context-list");
+  const contextList = document.getElementById("benchmark-context-list");
+  if (contextList && metrics.contextItems) {
+    metrics.contextItems.forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      contextList.appendChild(li);
+    });
+  }
+
+  clearElement("benchmark-comparison-grid");
+  const comparisonGrid = document.getElementById("benchmark-comparison-grid");
+  if (comparisonGrid && metrics.comparisonItems) {
+    metrics.comparisonItems.forEach((item) => {
+      const card = document.createElement("article");
+      card.className = "benchmark-mini-card";
+
+      const name = document.createElement("strong");
+      name.textContent = item.name;
+
+      const detail = document.createElement("span");
+      detail.textContent = item.summary;
+
+      card.appendChild(name);
+      card.appendChild(detail);
+      comparisonGrid.appendChild(card);
+    });
+  }
 }
 
 function renderContribution(contribution) {
   setText("contribution-title", contribution.title);
   setText("contribution-description", contribution.description);
+  setText("contribution-panel-title", contribution.panel?.title);
+  setText("contribution-panel-description", contribution.panel?.description);
+  setText("contribution-checklist-title", contribution.checklistTitle);
 
   clearElement("contribution-steps");
   const steps = document.getElementById("contribution-steps");
   if (steps) {
     contribution.steps.forEach((step, index) => {
       const li = document.createElement("li");
-      li.textContent = `${index + 1}. ${step}`;
+      if (typeof step === "string") {
+        li.textContent = step;
+      } else {
+        const strong = document.createElement("strong");
+        strong.className = "step-title";
+        strong.textContent = step.title || `Step ${index + 1}`;
+        const detail = document.createElement("p");
+        detail.className = "step-description";
+        detail.textContent = step.description || "";
+        li.appendChild(strong);
+        li.appendChild(detail);
+      }
       steps.appendChild(li);
     });
   }
@@ -170,6 +269,80 @@ function renderContribution(contribution) {
   const actions = document.getElementById("contribution-actions");
   if (actions) {
     contribution.actions.forEach((action) => actions.appendChild(createButton(action)));
+  }
+
+  clearElement("contribution-panel-links");
+  const panelLinks = document.getElementById("contribution-panel-links");
+  if (panelLinks && contribution.panel?.links) {
+    contribution.panel.links.forEach((linkData) => {
+      const li = document.createElement("li");
+      const link = document.createElement("a");
+      setLink(link, linkData);
+      li.appendChild(link);
+      panelLinks.appendChild(li);
+    });
+  }
+
+  clearElement("contribution-checklist");
+  const checklist = document.getElementById("contribution-checklist");
+  if (checklist && contribution.checklist) {
+    contribution.checklist.forEach((item) => {
+      const li = document.createElement("li");
+      li.textContent = item;
+      checklist.appendChild(li);
+    });
+  }
+}
+
+function renderFooter(content) {
+  setText("footer-brand-name", content.brand.name);
+  setText("footer-description", content.footer.description);
+  setText("footer-legal", content.footer.legalText);
+
+  clearElement("footer-badges");
+  const badges = document.getElementById("footer-badges");
+  if (badges) {
+    content.footer.badges.forEach((badgeText) => {
+      const badge = document.createElement("span");
+      badge.className = "footer-badge";
+      badge.textContent = badgeText;
+      badges.appendChild(badge);
+    });
+  }
+
+  clearElement("footer-link-groups");
+  const groupsContainer = document.getElementById("footer-link-groups");
+  if (groupsContainer) {
+    content.footer.groups.forEach((group) => {
+      const section = document.createElement("section");
+      section.className = "footer-group";
+
+      const title = document.createElement("h3");
+      title.textContent = group.title;
+
+      const list = document.createElement("ul");
+      group.links.forEach((linkData) => {
+        const li = document.createElement("li");
+        const link = document.createElement("a");
+        setLink(link, linkData);
+        li.appendChild(link);
+        list.appendChild(li);
+      });
+
+      section.appendChild(title);
+      section.appendChild(list);
+      groupsContainer.appendChild(section);
+    });
+  }
+
+  clearElement("footer-bottom-links");
+  const bottomLinks = document.getElementById("footer-bottom-links");
+  if (bottomLinks) {
+    content.footer.bottomLinks.forEach((linkData) => {
+      const link = document.createElement("a");
+      setLink(link, linkData);
+      bottomLinks.appendChild(link);
+    });
   }
 }
 
@@ -182,6 +355,7 @@ function setActiveLangButton(lang) {
   });
 }
 
+// Company standard: map browser variations to supported locales.
 function normalizeLang(inputLang) {
   if (!inputLang) return DEFAULT_LANG;
 
@@ -197,6 +371,12 @@ function normalizeLang(inputLang) {
 }
 
 function getInitialLang() {
+  const fromQuery = new URLSearchParams(window.location.search).get(LANG_QUERY_PARAM);
+  const normalizedQuery = normalizeLang(fromQuery);
+  if (fromQuery && SUPPORTED_LANGS.includes(normalizedQuery)) {
+    return normalizedQuery;
+  }
+
   const stored = window.localStorage.getItem(LANG_STORAGE_KEY);
   if (SUPPORTED_LANGS.includes(stored)) {
     return stored;
@@ -215,10 +395,16 @@ function applyContent(content) {
   setMetaTag('meta[property="og:title"]', content.meta.ogTitle);
   setMetaTag('meta[property="og:description"]', content.meta.ogDescription);
   setMetaTag('meta[property="og:image"]', content.meta.ogImage);
+  setMetaTag('#og-image-webp', content.meta.ogImage);
+  setMetaTag('#og-image-webp-type', "image/webp");
+  setMetaTag('#og-image-fallback', content.meta.ogImageFallback || content.meta.ogImage);
+  setMetaTag('#og-image-fallback-type', content.meta.ogImageFallback ? "image/png" : "image/webp");
+  setMetaTag('meta[name="twitter:title"]', content.meta.ogTitle);
+  setMetaTag('meta[name="twitter:description"]', content.meta.ogDescription);
+  setMetaTag('meta[name="twitter:image"]', content.meta.ogImageFallback || content.meta.ogImage);
   setMetaTag('meta[name="theme-color"]', content.meta.themeColor);
 
   setText("skip-link", content.ui.skipLink);
-  setText("footer-text", content.footer.text);
   currentUi = content.ui || null;
 
   const langToggle = document.getElementById("lang-toggle");
@@ -243,10 +429,11 @@ function applyContent(content) {
   renderFeatures(content.features);
   renderMetrics(content.metrics);
   renderContribution(content.contribution);
+  renderFooter(content);
 }
 
 async function loadContent(lang) {
-  const response = await fetch(getContentUrl(lang), { cache: "no-store" });
+  const response = await fetch(getContentUrl(lang), { cache: "default" });
   if (!response.ok) {
     throw new Error(`JSON ${response.status}`);
   }
@@ -254,6 +441,8 @@ async function loadContent(lang) {
   return response.json();
 }
 
+// Company standard: language switch is stateful and persisted locally
+// to keep user preference across sessions.
 async function switchLanguage(lang) {
   const status = document.getElementById("status");
   const normalized = normalizeLang(lang);
@@ -261,6 +450,12 @@ async function switchLanguage(lang) {
   try {
     const content = await loadContent(normalized);
     applyContent(content);
+    const publicUrl = getPublicUrlForLang(content, normalized);
+    setLinkHref("#canonical-link", publicUrl);
+    setMetaTag('meta[property="og:url"]', publicUrl);
+    setMetaTag('meta[property="og:locale"]', normalized === "pt-BR" ? "pt_BR" : "en_US");
+    setStructuredData(content, normalized);
+    updateBrowserUrl(normalized);
     setActiveLangButton(normalized);
     window.localStorage.setItem(LANG_STORAGE_KEY, normalized);
     if (status) {
@@ -269,7 +464,7 @@ async function switchLanguage(lang) {
   } catch (error) {
     if (status) {
       const prefix = currentUi?.loadErrorPrefix ||
-        (document.documentElement.lang === "en" ? "Failed to load content" : "Erro ao carregar conteúdo");
+        "Failed to load content";
       status.textContent = `${prefix}: ${error.message}`;
     }
   }
