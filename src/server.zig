@@ -302,10 +302,10 @@ pub const Server = struct {
     }
 
     fn timevalFromMs(timeout_ms: u32) std.posix.timeval {
-        // Conversão explícita para `timeval` (segundos + microssegundos), usada em SO_RCVTIMEO/SO_SNDTIMEO.
+        const tv = std.posix.timeval;
         return .{
-            .sec = @as(isize, @intCast(timeout_ms / 1000)),
-            .usec = @as(isize, @intCast((timeout_ms % 1000) * 1000)),
+            .sec = @as(@TypeOf(@as(tv, undefined).sec), @intCast(timeout_ms / 1000)),
+            .usec = @as(@TypeOf(@as(tv, undefined).usec), @intCast((timeout_ms % 1000) * 1000)),
         };
     }
 
