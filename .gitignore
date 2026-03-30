@@ -1,0 +1,25 @@
+# Zig build artifacts
+.zig-cache/
+zig-out/
+zig-cache/
+
+# Benchmark results (generated, not source)
+benchmarks/results/
+
+# OS files
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Docker
+docker-compose.override.yml
+
+# Logs
+*.log
