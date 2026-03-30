@@ -1,0 +1,196 @@
+{
+  "lang": "pt-BR",
+  "meta": {
+    "title": "Mercury Server | HTTP/1.1 em Zig para produção",
+    "description": "Mercury Server é um servidor HTTP/1.1 em Zig com parser manual, pool de conexões e métricas em tempo real. Explore docs, benchmark e contribua no GitHub.",
+    "ogTitle": "Mercury Server",
+    "ogDescription": "Servidor HTTP/1.1 em Zig com foco em performance, previsibilidade e observabilidade.",
+    "ogImage": "https://raw.githubusercontent.com/NullCipherr/Mercury-Server/main/docs/assets/mercury-logo.png",
+    "themeColor": "#0b1020"
+  },
+  "ui": {
+    "skipLink": "Pular para o conteúdo principal"
+  },
+  "brand": {
+    "name": "Mercury Server",
+    "logoAlt": "Logo do Mercury Server",
+    "logoUrl": "https://raw.githubusercontent.com/NullCipherr/Mercury-Server/main/docs/assets/mercury-logo.png"
+  },
+  "navigation": {
+    "links": [
+      {
+        "label": "Recursos",
+        "href": "#recursos"
+      },
+      {
+        "label": "Benchmark",
+        "href": "#metricas"
+      },
+      {
+        "label": "Contribuir",
+        "href": "#contribuicao"
+      },
+      {
+        "label": "GitHub",
+        "href": "https://github.com/NullCipherr/Mercury-Server",
+        "external": true
+      }
+    ],
+    "repoButton": {
+      "label": "Ver repositório",
+      "href": "https://github.com/NullCipherr/Mercury-Server",
+      "external": true
+    }
+  },
+  "hero": {
+    "eyebrow": "Open Source em Zig",
+    "title": "Servidor HTTP/1.1 com controle fino de memória e métricas em tempo real",
+    "description": "O Mercury Server é uma base de backend low-level para quem quer performance previsível, parser manual e arquitetura clara para evoluir em produção sem acoplar frameworks.",
+    "actions": [
+      {
+        "label": "Começar no GitHub",
+        "href": "https://github.com/NullCipherr/Mercury-Server",
+        "variant": "primary",
+        "external": true
+      },
+      {
+        "label": "Ler documentação",
+        "href": "https://github.com/NullCipherr/Mercury-Server/tree/main/docs",
+        "variant": "ghost",
+        "external": true
+      }
+    ],
+    "meta": [
+      "Zig 0.14+",
+      "HTTP/1.1 parser manual",
+      "Pool de conexões",
+      "/metrics nativo"
+    ]
+  },
+  "terminal": {
+    "path": "~/Mercury-Server",
+    "lines": [
+      {
+        "text": "$ zig build run -- --port 8080",
+        "kind": "ok"
+      },
+      {
+        "text": "[INFO] Mercury Server started on 0.0.0.0:8080"
+      },
+      {
+        "text": "[INFO] workers=8 | static=./static"
+      },
+      {
+        "text": ""
+      },
+      {
+        "text": "$ curl http://localhost:8080/health",
+        "kind": "ok"
+      },
+      {
+        "text": "{\"status\":\"ok\"}"
+      },
+      {
+        "text": ""
+      },
+      {
+        "text": "$ curl http://localhost:8080/metrics",
+        "kind": "warn"
+      },
+      {
+        "text": "requests_total 18342"
+      },
+      {
+        "text": "errors_total 0"
+      },
+      {
+        "text": "avg_latency_ms 1.75"
+      }
+    ]
+  },
+  "features": {
+    "title": "Feito para engenharia de sistema, não para esconder complexidade",
+    "description": "Arquitetura orientada a previsibilidade operacional: menos mágica, mais controle de I/O, limites explícitos e fluxo de request transparente para debug e evolução.",
+    "cards": [
+      {
+        "title": "Parser HTTP manual",
+        "description": "Sem framework web. Parsing direto com limites de header/body configuráveis e foco em robustez."
+      },
+      {
+        "title": "Pool thread-safe",
+        "description": "Fila concorrente desacopla accept do processamento e reduz churn de threads."
+      },
+      {
+        "title": "Métricas embutidas",
+        "description": "Endpoint /metrics com contadores de requests, erros e latência média."
+      },
+      {
+        "title": "Hardening básico",
+        "description": "Timeouts por conexão, validação de payload e proteção contra path traversal no static server."
+      },
+      {
+        "title": "Operação prática",
+        "description": "Execução via Zig, Makefile e Docker Compose para ambiente local ou pipeline CI/CD."
+      },
+      {
+        "title": "Base para crescer",
+        "description": "Código modular em Zig para evoluir keep-alive, streaming de arquivos e observabilidade avançada."
+      }
+    ]
+  },
+  "metrics": {
+    "title": "Snapshot de benchmark oficial",
+    "description": "Resultado de referência publicado no repositório (28/03/2026, America/Sao_Paulo).",
+    "items": [
+      {
+        "value": "34.645",
+        "label": "RPS médio (Mercury)"
+      },
+      {
+        "value": "1.75 ms",
+        "label": "Latência média"
+      },
+      {
+        "value": "0.00%",
+        "label": "Taxa média de erro"
+      },
+      {
+        "value": "HTTP/1.1",
+        "label": "Protocolo implementado"
+      }
+    ]
+  },
+  "contribution": {
+    "title": "Contribuição: entre rápido e com contexto",
+    "description": "Quer melhorar parser, observabilidade, testes ou docs? O projeto está aberto para PRs técnicas e incrementais. O fluxo é simples e já documentado para facilitar onboarding.",
+    "steps": [
+      "Leia o guia em CONTRIBUTING.md e alinhe escopo da mudança.",
+      "Faça um fork e crie branch com prefixo descritivo (ex.: feat/...).",
+      "Rode os checks locais com zig build test e scripts de validação.",
+      "Abra PR com contexto técnico, trade-offs e evidências de teste."
+    ],
+    "actions": [
+      {
+        "label": "Guia de contribuição",
+        "href": "https://github.com/NullCipherr/Mercury-Server/blob/main/CONTRIBUTING.md",
+        "variant": "primary",
+        "external": true
+      },
+      {
+        "label": "Ver issues abertas",
+        "href": "https://github.com/NullCipherr/Mercury-Server/issues",
+        "variant": "ghost",
+        "external": true
+      },
+      {
+        "label": "Pipeline CI",
+        "href": "https://github.com/NullCipherr/Mercury-Server/actions",
+        "variant": "ghost",
+        "external": true
+      }
+    ]
+  },
+  "footer": {
+    "text": "Mercury Server é software livre sob licença MIT. Construído para estudo sério de redes, concorrência e engenharia de backend em Zig."
+  }
+}

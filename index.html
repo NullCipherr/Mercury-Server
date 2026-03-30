@@ -3,16 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Mercury Server | HTTP/1.1 em Zig para produção</title>
-  <meta
-    name="description"
-    content="Mercury Server é um servidor HTTP/1.1 em Zig com parser manual, pool de conexões e métricas em tempo real. Explore docs, benchmark e contribua no GitHub."
-  />
+  <title>Mercury Server</title>
+  <meta name="description" content="Landing page do Mercury Server" />
   <meta property="og:title" content="Mercury Server" />
-  <meta
-    property="og:description"
-    content="Servidor HTTP/1.1 em Zig com foco em performance, previsibilidade e observabilidade."
-  />
+  <meta property="og:description" content="Projeto open source em Zig" />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="https://raw.githubusercontent.com/NullCipherr/Mercury-Server/main/docs/assets/mercury-logo.png" />
   <meta name="theme-color" content="#0b1020" />
@@ -22,433 +16,23 @@
     href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     rel="stylesheet"
   />
-  <style>
-    :root {
-      --bg: #0b1020;
-      --bg-soft: #121a33;
-      --card: #121c3c;
-      --line: #2a365f;
-      --text: #e6ecff;
-      --text-soft: #a6b3d7;
-      --primary: #42d392;
-      --primary-strong: #2ab275;
-      --accent: #5ca8ff;
-      --danger: #ff7070;
-      --shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
-      --radius: 14px;
-      --radius-sm: 10px;
-      --max: 1140px;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: "Space Grotesk", sans-serif;
-      color: var(--text);
-      background:
-        radial-gradient(circle at 15% -10%, rgba(92, 168, 255, 0.26), transparent 40%),
-        radial-gradient(circle at 90% 15%, rgba(66, 211, 146, 0.2), transparent 35%),
-        linear-gradient(155deg, #090e1b 0%, #0b1020 50%, #080b18 100%);
-      line-height: 1.55;
-    }
-
-    .skip-link {
-      position: absolute;
-      left: -999px;
-      top: auto;
-      width: 1px;
-      height: 1px;
-      overflow: hidden;
-    }
-
-    .skip-link:focus {
-      left: 12px;
-      top: 12px;
-      width: auto;
-      height: auto;
-      padding: 8px 12px;
-      border-radius: 8px;
-      background: var(--text);
-      color: #001;
-      z-index: 999;
-    }
-
-    .container {
-      width: min(100% - 2rem, var(--max));
-      margin-inline: auto;
-    }
-
-    header {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      background: rgba(8, 12, 24, 0.75);
-      border-bottom: 1px solid rgba(166, 179, 215, 0.12);
-    }
-
-    .nav {
-      min-height: 72px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.7rem;
-      text-decoration: none;
-      color: var(--text);
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-
-    .brand img {
-      width: 30px;
-      height: 30px;
-      object-fit: contain;
-    }
-
-    .menu {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      flex-wrap: wrap;
-    }
-
-    .menu a {
-      color: var(--text-soft);
-      text-decoration: none;
-      font-weight: 500;
-      transition: color 180ms ease;
-    }
-
-    .menu a:hover,
-    .menu a:focus-visible {
-      color: var(--text);
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      text-decoration: none;
-      border: 1px solid transparent;
-      border-radius: 999px;
-      min-height: 42px;
-      padding: 0 1rem;
-      font-weight: 600;
-      transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
-    }
-
-    .btn:hover,
-    .btn:focus-visible {
-      transform: translateY(-1px);
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--primary), var(--primary-strong));
-      color: #04130d;
-      box-shadow: var(--shadow);
-    }
-
-    .btn-ghost {
-      border-color: var(--line);
-      color: var(--text);
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .hero {
-      padding: 5rem 0 3rem;
-    }
-
-    .hero-grid {
-      display: grid;
-      gap: 2rem;
-      grid-template-columns: 1.25fr 1fr;
-      align-items: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.45rem;
-      font-family: "IBM Plex Mono", monospace;
-      color: var(--primary);
-      background: rgba(66, 211, 146, 0.1);
-      border: 1px solid rgba(66, 211, 146, 0.35);
-      border-radius: 999px;
-      padding: 0.2rem 0.7rem;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
-
-    h1,
-    h2,
-    h3 {
-      line-height: 1.15;
-      margin: 0;
-    }
-
-    h1 {
-      font-size: clamp(2rem, 4.8vw, 3.4rem);
-      letter-spacing: -0.03em;
-      margin-bottom: 1rem;
-      text-wrap: balance;
-    }
-
-    .hero p {
-      margin: 0;
-      max-width: 62ch;
-      color: var(--text-soft);
-      font-size: clamp(1rem, 1.7vw, 1.2rem);
-    }
-
-    .hero-actions {
-      margin-top: 1.7rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.85rem;
-    }
-
-    .hero-meta {
-      margin-top: 1.6rem;
-      display: flex;
-      gap: 0.75rem;
-      flex-wrap: wrap;
-      font-family: "IBM Plex Mono", monospace;
-      color: var(--text-soft);
-      font-size: 0.9rem;
-    }
-
-    .hero-meta span {
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      padding: 0.35rem 0.6rem;
-      background: rgba(255, 255, 255, 0.02);
-    }
-
-    .terminal {
-      background: linear-gradient(145deg, rgba(14, 21, 43, 0.9), rgba(10, 15, 31, 0.95));
-      border: 1px solid rgba(92, 168, 255, 0.28);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      overflow: hidden;
-      transform: perspective(1100px) rotateY(-6deg) rotateX(2deg);
-      transform-origin: center;
-    }
-
-    .terminal-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 1rem;
-      padding: 0.8rem 1rem;
-      border-bottom: 1px solid var(--line);
-      background: rgba(255, 255, 255, 0.02);
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 0.83rem;
-      color: var(--text-soft);
-    }
-
-    .dots {
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
-    }
-
-    .dot {
-      width: 9px;
-      height: 9px;
-      border-radius: 999px;
-      display: inline-block;
-    }
-
-    .dot:nth-child(1) {
-      background: #ff7070;
-    }
-
-    .dot:nth-child(2) {
-      background: #f8d66d;
-    }
-
-    .dot:nth-child(3) {
-      background: #65dc9c;
-    }
-
-    .terminal pre {
-      margin: 0;
-      padding: 1rem;
-      overflow: auto;
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 0.88rem;
-      color: #d0ddff;
-    }
-
-    .terminal code .ok {
-      color: #6ee7b7;
-    }
-
-    .terminal code .warn {
-      color: #f8d66d;
-    }
-
-    section {
-      padding: 2.9rem 0;
-    }
-
-    .section-head {
-      margin-bottom: 1.4rem;
-      max-width: 66ch;
-    }
-
-    .section-head p {
-      margin: 0.6rem 0 0;
-      color: var(--text-soft);
-    }
-
-    .features {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 1rem;
-    }
-
-    .card {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-sm);
-      padding: 1.1rem;
-      background: linear-gradient(170deg, rgba(18, 28, 60, 0.95), rgba(10, 16, 34, 0.88));
-      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
-    }
-
-    .card h3 {
-      margin-bottom: 0.5rem;
-      font-size: 1.05rem;
-    }
-
-    .card p {
-      margin: 0;
-      color: var(--text-soft);
-      font-size: 0.95rem;
-    }
-
-    .metrics {
-      display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
-      gap: 0.85rem;
-    }
-
-    .metric {
-      border: 1px solid var(--line);
-      border-radius: var(--radius-sm);
-      padding: 1rem;
-      background: rgba(10, 16, 34, 0.8);
-    }
-
-    .metric strong {
-      display: block;
-      font-family: "IBM Plex Mono", monospace;
-      font-size: 1.2rem;
-      color: var(--text);
-    }
-
-    .metric span {
-      color: var(--text-soft);
-      font-size: 0.9rem;
-    }
-
-    .contribute {
-      border: 1px solid rgba(66, 211, 146, 0.4);
-      border-radius: var(--radius);
-      padding: 1.2rem;
-      background:
-        linear-gradient(170deg, rgba(9, 18, 34, 0.95), rgba(6, 14, 26, 0.95)),
-        radial-gradient(circle at 25% 0%, rgba(66, 211, 146, 0.15), transparent 45%);
-    }
-
-    .steps {
-      margin: 1rem 0 0;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0.85rem;
-    }
-
-    .steps li {
-      border: 1px solid rgba(66, 211, 146, 0.3);
-      border-radius: 10px;
-      padding: 0.85rem;
-      background: rgba(66, 211, 146, 0.06);
-      font-size: 0.96rem;
-    }
-
-    .steps code {
-      font-family: "IBM Plex Mono", monospace;
-      color: #acf2ce;
-    }
-
-    .cta-row {
-      margin-top: 1rem;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-    }
-
-    footer {
-      border-top: 1px solid rgba(166, 179, 215, 0.2);
-      margin-top: 2.2rem;
-      padding: 1.3rem 0 2rem;
-      color: var(--text-soft);
-      font-size: 0.92rem;
-    }
-
-    @media (max-width: 980px) {
-      .hero-grid,
-      .features,
-      .metrics,
-      .steps {
-        grid-template-columns: 1fr;
-      }
-
-      .terminal {
-        transform: none;
-      }
-
-      .menu {
-        display: none;
-      }
-    }
-  </style>
+  <link rel="stylesheet" href="assets/css/styles.css" />
 </head>
 <body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo principal</a>
+  <a class="skip-link" href="#conteudo" id="skip-link"></a>
 
   <header>
     <div class="container nav" role="navigation" aria-label="Menu principal">
       <a class="brand" href="#topo" id="topo">
-        <img src="https://raw.githubusercontent.com/NullCipherr/Mercury-Server/main/docs/assets/mercury-logo.png" alt="Logo do Mercury Server" />
-        <span>Mercury Server</span>
+        <img id="brand-logo" src="" alt="Logo do projeto" />
+        <span id="brand-name"></span>
       </a>
+
       <nav class="menu" aria-label="Seções da página">
-        <a href="#recursos">Recursos</a>
-        <a href="#metricas">Benchmark</a>
-        <a href="#contribuicao">Contribuir</a>
-        <a href="https://github.com/NullCipherr/Mercury-Server" target="_blank" rel="noreferrer">GitHub</a>
+        <ul id="nav-menu-list" class="menu-list"></ul>
       </nav>
-      <a class="btn btn-primary" href="https://github.com/NullCipherr/Mercury-Server" target="_blank" rel="noreferrer">
-        Ver repositório
-      </a>
+
+      <a class="btn btn-primary" id="repo-button" href="#"></a>
     </div>
   </header>
 
@@ -456,22 +40,12 @@
     <section class="hero">
       <div class="container hero-grid">
         <div>
-          <span class="eyebrow">Open Source em Zig</span>
-          <h1>Servidor HTTP/1.1 com controle fino de memória e métricas em tempo real</h1>
-          <p>
-            O Mercury Server é uma base de backend low-level para quem quer performance previsível,
-            parser manual e arquitetura clara para evoluir em produção sem acoplar frameworks.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="https://github.com/NullCipherr/Mercury-Server" target="_blank" rel="noreferrer">Começar no GitHub</a>
-            <a class="btn btn-ghost" href="https://github.com/NullCipherr/Mercury-Server/tree/main/docs">Ler documentação</a>
-          </div>
-          <div class="hero-meta" aria-label="Resumo técnico">
-            <span>Zig 0.14+</span>
-            <span>HTTP/1.1 parser manual</span>
-            <span>Pool de conexões</span>
-            <span>/metrics nativo</span>
-          </div>
+          <span class="eyebrow" id="hero-eyebrow"></span>
+          <h1 id="hero-title"></h1>
+          <p id="hero-description"></p>
+
+          <div class="hero-actions" id="hero-actions"></div>
+          <div class="hero-meta" id="hero-meta" aria-label="Resumo técnico"></div>
         </div>
 
         <aside class="terminal" aria-label="Preview de execução no terminal">
@@ -481,20 +55,9 @@
               <span class="dot"></span>
               <span class="dot"></span>
             </div>
-            <span>~/Mercury-Server</span>
+            <span id="terminal-path"></span>
           </div>
-          <pre><code><span class="ok">$ zig build run -- --port 8080</span>
-[INFO] Mercury Server started on 0.0.0.0:8080
-[INFO] workers=8 | static=./static
-
-<span class="ok">$ curl http://localhost:8080/health</span>
-{"status":"ok"}
-
-<span class="warn">$ curl http://localhost:8080/metrics</span>
-requests_total 18342
-errors_total 0
-avg_latency_ms 1.75
-</code></pre>
+          <pre><code id="terminal-lines"></code></pre>
         </aside>
       </div>
     </section>
@@ -502,98 +65,46 @@ avg_latency_ms 1.75
     <section id="recursos">
       <div class="container">
         <div class="section-head">
-          <h2>Feito para engenharia de sistema, não para esconder complexidade</h2>
-          <p>
-            Arquitetura orientada a previsibilidade operacional: menos mágica, mais controle de I/O,
-            limites explícitos e fluxo de request transparente para debug e evolução.
-          </p>
+          <h2 id="features-title"></h2>
+          <p id="features-description"></p>
         </div>
-        <div class="features">
-          <article class="card">
-            <h3>Parser HTTP manual</h3>
-            <p>Sem framework web. Parsing direto com limites de header/body configuráveis e foco em robustez.</p>
-          </article>
-          <article class="card">
-            <h3>Pool thread-safe</h3>
-            <p>Fila concorrente desacopla <code>accept</code> do processamento e reduz churn de threads.</p>
-          </article>
-          <article class="card">
-            <h3>Métricas embutidas</h3>
-            <p>Endpoint <code>/metrics</code> com contadores de requests, erros e latência média.</p>
-          </article>
-          <article class="card">
-            <h3>Hardening básico</h3>
-            <p>Timeouts por conexão, validação de payload e proteção contra path traversal no static server.</p>
-          </article>
-          <article class="card">
-            <h3>Operação prática</h3>
-            <p>Execução via Zig, Makefile e Docker Compose para ambiente local ou pipeline CI/CD.</p>
-          </article>
-          <article class="card">
-            <h3>Base para crescer</h3>
-            <p>Código modular em Zig para evoluir keep-alive, streaming de arquivos e observabilidade avançada.</p>
-          </article>
-        </div>
+        <div class="features" id="features-grid"></div>
       </div>
     </section>
 
     <section id="metricas">
       <div class="container">
         <div class="section-head">
-          <h2>Snapshot de benchmark oficial</h2>
-          <p>Resultado de referência publicado no repositório (28/03/2026, America/Sao_Paulo).</p>
+          <h2 id="metrics-title"></h2>
+          <p id="metrics-description"></p>
         </div>
-        <div class="metrics" aria-label="Resumo de benchmark">
-          <article class="metric">
-            <strong>34.645</strong>
-            <span>RPS médio (Mercury)</span>
-          </article>
-          <article class="metric">
-            <strong>1.75 ms</strong>
-            <span>Latência média</span>
-          </article>
-          <article class="metric">
-            <strong>0.00%</strong>
-            <span>Taxa média de erro</span>
-          </article>
-          <article class="metric">
-            <strong>HTTP/1.1</strong>
-            <span>Protocolo implementado</span>
-          </article>
-        </div>
+        <div class="metrics" id="metrics-grid" aria-label="Resumo de benchmark"></div>
       </div>
     </section>
 
     <section id="contribuicao">
       <div class="container contribute">
         <div class="section-head">
-          <h2>Contribuição: entre rápido e com contexto</h2>
-          <p>
-            Quer melhorar parser, observabilidade, testes ou docs? O projeto está aberto para PRs técnicas e incrementais.
-            O fluxo é simples e já documentado para facilitar onboarding.
-          </p>
+          <h2 id="contribution-title"></h2>
+          <p id="contribution-description"></p>
         </div>
 
-        <ol class="steps">
-          <li>1. Leia o guia em <code>CONTRIBUTING.md</code> e alinhe escopo da mudança.</li>
-          <li>2. Faça um fork e crie branch com prefixo descritivo (ex.: <code>feat/...</code>).</li>
-          <li>3. Rode os checks locais com <code>zig build test</code> e scripts de validação.</li>
-          <li>4. Abra PR com contexto técnico, trade-offs e evidências de teste.</li>
-        </ol>
-
-        <div class="cta-row">
-          <a class="btn btn-primary" href="https://github.com/NullCipherr/Mercury-Server/blob/main/CONTRIBUTING.md" target="_blank" rel="noreferrer">Guia de contribuição</a>
-          <a class="btn btn-ghost" href="https://github.com/NullCipherr/Mercury-Server/issues" target="_blank" rel="noreferrer">Ver issues abertas</a>
-          <a class="btn btn-ghost" href="https://github.com/NullCipherr/Mercury-Server/actions" target="_blank" rel="noreferrer">Pipeline CI</a>
-        </div>
+        <ol class="steps" id="contribution-steps"></ol>
+        <div class="cta-row" id="contribution-actions"></div>
       </div>
     </section>
   </main>
 
   <footer>
-    <div class="container">
-      Mercury Server é software livre sob licença MIT. Construído para estudo sério de redes, concorrência e engenharia de backend em Zig.
-    </div>
+    <div class="container" id="footer-text"></div>
   </footer>
+
+  <p class="status" id="status" role="status" aria-live="polite"></p>
+
+  <noscript>
+    <p class="noscript">Ative JavaScript para carregar o conteudo da landing page.</p>
+  </noscript>
+
+  <script src="assets/js/main.js" defer></script>
 </body>
 </html>
