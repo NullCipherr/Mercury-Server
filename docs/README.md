@@ -1,30 +1,37 @@
-# Mercury Server - Documentação Modular
+# Mercury Server — Documentation
 
-Esta pasta centraliza a documentação técnica do projeto de forma modular, para facilitar onboarding, manutenção e handoff.
+This directory contains the project's technical documentation in **English** (primary) and **Portuguese** (secondary).
 
-## Índice
+## English (en)
 
-- [ARQUITETURA.md](ARQUITETURA.md)
-  - visão de componentes, fluxo de request, concorrência e memória.
-- [API.md](API.md)
-  - contratos dos endpoints, exemplos de request/response e códigos de erro.
-- [OPERACAO_DEPLOY_MANUTENCAO.md](OPERACAO_DEPLOY_MANUTENCAO.md)
-  - execução local, Docker, Makefile, troubleshooting e rotina de manutenção.
-- [OBSERVABILIDADE_E_BENCHMARK.md](OBSERVABILIDADE_E_BENCHMARK.md)
-  - métricas internas, logs, benchmark comparativo e leitura de resultados.
-- [TESTES_AUTOMATIZADOS.md](TESTES_AUTOMATIZADOS.md)
-  - estratégia de testes, suíte de integração e pipeline local de CI.
-- [METRICAS_AUTOMACAO_SHELL.md](METRICAS_AUTOMACAO_SHELL.md)
-  - coleta automatizada de métricas via scripts shell e geração de relatório.
-- [ROADMAP_TECNICO.md](ROADMAP_TECNICO.md)
-  - lacunas atuais para produção e próximos incrementos recomendados.
+| Document | Description |
+|----------|-------------|
+| [Architecture](en/ARCHITECTURE.md) | Components, request flow, concurrency, and memory model |
+| [API](en/API.md) | Endpoint contracts, request/response examples, error codes |
+| [Operations](en/OPERATIONS.md) | Local execution, Docker, Makefile, troubleshooting, maintenance |
+| [Observability](en/OBSERVABILITY.md) | Internal metrics, logs, comparative benchmarks |
+| [Testing](en/TESTING.md) | Test strategy, integration suite, local CI pipeline |
+| [Metrics Automation](en/METRICS_AUTOMATION.md) | Shell-based metrics collection and reporting |
+| [Roadmap](en/ROADMAP.md) | Current gaps and recommended next steps |
 
-## Como usar esta documentação
+## Português (pt-br)
 
-1. Comece por `ARQUITETURA.md` para entender o desenho do servidor.
-2. Em seguida, consulte `API.md` para contratos de integração.
-3. Para subir e operar o ambiente, use `OPERACAO_DEPLOY_MANUTENCAO.md`.
-4. Para análise de comportamento e desempenho, use `OBSERVABILIDADE_E_BENCHMARK.md`.
-5. Para automação de testes, use `TESTES_AUTOMATIZADOS.md`.
-6. Para automação de métricas, use `METRICAS_AUTOMACAO_SHELL.md`.
-7. Para planejamento de evolução, use `ROADMAP_TECNICO.md`.
+| Documento | Descrição |
+|-----------|-----------|
+| [Arquitetura](pt-br/ARQUITETURA.md) | Componentes, fluxo de request, concorrência e memória |
+| [API](pt-br/API.md) | Contratos de endpoints, exemplos de request/response, códigos de erro |
+| [Operação](pt-br/OPERACAO_DEPLOY_MANUTENCAO.md) | Execução local, Docker, Makefile, troubleshooting e manutenção |
+| [Observabilidade](pt-br/OBSERVABILIDADE_E_BENCHMARK.md) | Métricas internas, logs, benchmark comparativo |
+| [Testes](pt-br/TESTES_AUTOMATIZADOS.md) | Estratégia de testes, suíte de integração, pipeline local |
+| [Automação de Métricas](pt-br/METRICAS_AUTOMACAO_SHELL.md) | Coleta automatizada de métricas via shell |
+| [Roadmap](pt-br/ROADMAP_TECNICO.md) | Lacunas atuais e próximos incrementos recomendados |
+
+## How to Use
+
+1. Start with **Architecture** to understand the server design.
+2. Check **API** for integration contracts.
+3. Use **Operations** to set up and run the environment.
+4. Use **Observability** for performance analysis.
+5. Use **Testing** for test automation.
+6. Use **Metrics Automation** for shell-based metric workflows.
+7. Use **Roadmap** for evolution planning.

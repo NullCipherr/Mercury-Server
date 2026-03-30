@@ -1,5 +1,7 @@
 # Roadmap Técnico
 
+*[Read in English](../en/ROADMAP.md)*
+
 Este roadmap foca nos próximos passos para elevar o Mercury Server de base sólida para uso mais robusto em produção.
 
 ## Prioridade alta

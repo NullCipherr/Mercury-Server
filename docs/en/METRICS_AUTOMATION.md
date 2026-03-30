@@ -1,45 +1,47 @@
-# Automação de Métricas via Shell
+# Metrics Automation via Shell
 
-## Objetivo
+*[Leia em Português](../pt-br/METRICAS_AUTOMACAO_SHELL.md)*
 
-Padronizar coleta e leitura de métricas do endpoint `/metrics` sem dependência de stack externa.
+## Purpose
 
-## Scripts disponíveis
+Standardize collection and reading of metrics from the `/metrics` endpoint without depending on an external stack.
+
+## Available Scripts
 
 - `scripts/metrics/collect_metrics.sh`
-  - coleta periódica e grava CSV.
+  - Periodic collection, writes to CSV.
 - `scripts/metrics/report_metrics_csv.sh`
-  - gera resumo analítico a partir do CSV.
+  - Generates an analytical summary from a CSV file.
 - `scripts/metrics/benchmark_with_metrics.sh`
-  - executa `wrk` e coleta métricas em paralelo.
+  - Runs `wrk` and collects metrics in parallel.
 
-## Uso direto dos scripts
+## Direct Script Usage
 
-Coleta por 30 segundos:
+Collect for 30 seconds:
 
 ```bash
 METRICS_URL=http://127.0.0.1:8080/metrics DURATION_SEC=30 INTERVAL_SEC=1 bash scripts/metrics/collect_metrics.sh
 ```
 
-Resumo de arquivo coletado:
+Summary of a collected file:
 
 ```bash
 bash scripts/metrics/report_metrics_csv.sh benchmarks/results/metrics_YYYYMMDD_HHMMSS.csv
 ```
 
-Benchmark com coleta acoplada:
+Benchmark with coupled collection:
 
 ```bash
 TARGET_URL=http://127.0.0.1:8080/health DURATION=20s DURATION_SEC=20 THREADS=8 CONNECTIONS=128 bash scripts/metrics/benchmark_with_metrics.sh
 ```
 
-## Uso via Makefile
+## Usage via Makefile
 
 - `make metrics-collect`
-- `make metrics-report METRICS_FILE=<arquivo.csv>`
+- `make metrics-report METRICS_FILE=<file.csv>`
 - `make bench-metrics`
 
-Variáveis úteis:
+Useful variables:
 
 - `METRICS_URL`
 - `METRICS_DURATION_SEC`
@@ -47,7 +49,7 @@ Variáveis úteis:
 - `METRICS_OUTPUT`
 - `METRICS_FILE`
 
-## Formato do CSV
+## CSV Format
 
 Header:
 
@@ -55,7 +57,7 @@ Header:
 timestamp_iso,timestamp_epoch_ms,requests,errors,avg_latency_ms
 ```
 
-Observações:
+Notes:
 
-- quando não há resposta válida, a linha é registrada com `NA`;
-- o relatório ignora linhas inválidas automaticamente.
+- When there is no valid response, the row is recorded with `NA`.
+- The report automatically ignores invalid rows.

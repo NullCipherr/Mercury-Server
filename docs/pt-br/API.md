@@ -1,5 +1,7 @@
 # API do Mercury Server
 
+*[Read in English](../en/API.md)*
+
 Base URL local: `http://127.0.0.1:8080`
 
 ## Endpoints

@@ -1,5 +1,7 @@
 # Observabilidade e Benchmark
 
+*[Read in English](../en/OBSERVABILITY.md)*
+
 ## Métricas disponíveis
 
 Endpoint: `GET /metrics`

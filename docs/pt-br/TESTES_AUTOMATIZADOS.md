@@ -1,5 +1,7 @@
 # Testes Automatizados
 
+*[Read in English](../en/TESTING.md)*
+
 ## Estratégia adotada
 
 A automação de testes foi separada em camadas para reduzir regressões e facilitar execução em CI local:

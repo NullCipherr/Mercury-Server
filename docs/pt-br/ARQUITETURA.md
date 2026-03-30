@@ -1,5 +1,7 @@
 # Arquitetura do Mercury Server
 
+*[Read in English](../en/ARCHITECTURE.md)*
+
 ## Objetivo técnico
 
 O Mercury Server é um servidor HTTP/1.1 de baixo nível em Zig, com foco em:

@@ -15,16 +15,17 @@
 
 ## Documentation
 
-Technical documentation is organized into modules for easy onboarding and maintenance:
+Technical documentation is organized into modules for easy onboarding and maintenance.
+English is the primary language; Portuguese translations are available under `docs/pt-br/`.
 
-- [docs/README.md](docs/README.md)
-- [docs/ARQUITETURA.md](docs/ARQUITETURA.md)
-- [docs/API.md](docs/API.md)
-- [docs/OPERACAO_DEPLOY_MANUTENCAO.md](docs/OPERACAO_DEPLOY_MANUTENCAO.md)
-- [docs/OBSERVABILIDADE_E_BENCHMARK.md](docs/OBSERVABILIDADE_E_BENCHMARK.md)
-- [docs/TESTES_AUTOMATIZADOS.md](docs/TESTES_AUTOMATIZADOS.md)
-- [docs/METRICAS_AUTOMACAO_SHELL.md](docs/METRICAS_AUTOMACAO_SHELL.md)
-- [docs/ROADMAP_TECNICO.md](docs/ROADMAP_TECNICO.md)
+- [Documentation Index](docs/README.md)
+- [Architecture](docs/en/ARCHITECTURE.md)
+- [API](docs/en/API.md)
+- [Operations](docs/en/OPERATIONS.md)
+- [Observability & Benchmark](docs/en/OBSERVABILITY.md)
+- [Testing](docs/en/TESTING.md)
+- [Metrics Automation](docs/en/METRICS_AUTOMATION.md)
+- [Roadmap](docs/en/ROADMAP.md)
 
 ---
 
@@ -32,8 +33,8 @@ Technical documentation is organized into modules for easy onboarding and mainte
 
 Static interface served by Mercury Server itself at `GET /`:
 
-- arquivo: `static/index.html`
-- acesso local: `http://localhost:8080`
+- File: `static/index.html`
+- Local access: `http://localhost:8080`
 
 ---
 
@@ -182,14 +183,23 @@ Recommended next steps for production maturity:
 ├── docs/
 │   ├── assets/
 │   │   └── mercury-logo.png
-│   ├── API.md
-│   ├── ARQUITETURA.md
-│   ├── METRICAS_AUTOMACAO_SHELL.md
-│   ├── OBSERVABILIDADE_E_BENCHMARK.md
-│   ├── OPERACAO_DEPLOY_MANUTENCAO.md
 │   ├── README.md
-│   ├── ROADMAP_TECNICO.md
-│   └── TESTES_AUTOMATIZADOS.md
+│   ├── en/
+│   │   ├── API.md
+│   │   ├── ARCHITECTURE.md
+│   │   ├── METRICS_AUTOMATION.md
+│   │   ├── OBSERVABILITY.md
+│   │   ├── OPERATIONS.md
+│   │   ├── ROADMAP.md
+│   │   └── TESTING.md
+│   └── pt-br/
+│       ├── API.md
+│       ├── ARQUITETURA.md
+│       ├── METRICAS_AUTOMACAO_SHELL.md
+│       ├── OBSERVABILIDADE_E_BENCHMARK.md
+│       ├── OPERACAO_DEPLOY_MANUTENCAO.md
+│       ├── ROADMAP_TECNICO.md
+│       └── TESTES_AUTOMATIZADOS.md
 ├── Makefile
 └── README.md
 ```
@@ -242,7 +252,7 @@ make run PORT=8080 THREADS=8
 docker compose up -d --build
 ```
 
-Ou via Makefile:
+Or via Makefile:
 
 ```bash
 make docker-build
@@ -256,7 +266,7 @@ docker compose logs -f mercury-server
 docker compose down
 ```
 
-Ou via Makefile:
+Or via Makefile:
 
 ```bash
 make docker-logs
@@ -307,5 +317,5 @@ Contributions are welcome! Please read our [Contributing Guide](CONTRIBUTING.md)
 For security vulnerabilities, please refer to our [Security Policy](SECURITY.md).
 
 <div align="center">
-  Feito com Zig e foco em engenharia de baixo nível, observabilidade e evolução incremental.
+  Built with Zig — focused on low-level engineering, observability, and incremental evolution.
 </div>

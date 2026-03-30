@@ -1,5 +1,7 @@
 # Operação, Deploy e Manutenção
 
+*[Read in English](../en/OPERATIONS.md)*
+
 ## Pré-requisitos
 
 - Zig `0.15+`
