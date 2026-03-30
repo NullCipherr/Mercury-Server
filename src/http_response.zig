@@ -65,11 +65,56 @@ fn normalizePath(target: []const u8, allocator: std.mem.Allocator) ![]u8 {
     if (!std.mem.startsWith(u8, target, "/static/")) return error.InvalidPath;
 
     const rel = target[8..];
-    // Bloqueio explícito de path traversal.
-    if (std.mem.indexOf(u8, rel, "..") != null) return error.InvalidPath;
-    if (rel.len == 0) return try allocator.dupe(u8, "index.html");
 
-    return allocator.dupe(u8, rel);
+    // Reject null bytes (poison for C-backed filesystem calls).
+    if (std.mem.indexOfScalar(u8, rel, 0) != null) return error.InvalidPath;
+
+    // Decode percent-encoded sequences before validation so that
+    // %2e%2e, %2F, and similar encoded traversal payloads are caught.
+    const decoded = percentDecode(rel, allocator) catch return error.InvalidPath;
+    defer allocator.free(decoded);
+
+    // Block path traversal in the decoded path.
+    if (std.mem.indexOf(u8, decoded, "..") != null) return error.InvalidPath;
+
+    // Reject paths that contain backslashes (Windows-style traversal).
+    if (std.mem.indexOfScalar(u8, decoded, '\\') != null) return error.InvalidPath;
+
+    if (decoded.len == 0) return try allocator.dupe(u8, "index.html");
+
+    return allocator.dupe(u8, decoded);
+}
+
+/// Decode percent-encoded bytes in a URI path (e.g. %2F -> '/').
+fn percentDecode(input: []const u8, allocator: std.mem.Allocator) ![]u8 {
+    var out = try allocator.alloc(u8, input.len);
+    var i: usize = 0;
+    var j: usize = 0;
+    while (i < input.len) {
+        if (input[i] == '%' and i + 2 < input.len) {
+            const high = hexVal(input[i + 1]) orelse return error.InvalidEncoding;
+            const low = hexVal(input[i + 2]) orelse return error.InvalidEncoding;
+            out[j] = (high << 4) | low;
+            i += 3;
+        } else {
+            out[j] = input[i];
+            i += 1;
+        }
+        j += 1;
+    }
+    // Shrink to actual length.
+    const result = try allocator.dupe(u8, out[0..j]);
+    allocator.free(out);
+    return result;
+}
+
+fn hexVal(c: u8) ?u4 {
+    return switch (c) {
+        '0'...'9' => @intCast(c - '0'),
+        'a'...'f' => @intCast(c - 'a' + 10),
+        'A'...'F' => @intCast(c - 'A' + 10),
+        else => null,
+    };
 }
 
 /// Resolve `Content-Type` por extensão de arquivo.
